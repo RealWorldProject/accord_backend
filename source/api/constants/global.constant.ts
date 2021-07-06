@@ -1,0 +1,2 @@
+export const ADMIN_PERMISSION_LEVEL = 0;
+export const USER_PERMISSION_LEVEL = 1;
