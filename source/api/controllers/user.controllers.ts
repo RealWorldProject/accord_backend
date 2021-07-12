@@ -74,10 +74,10 @@ export const loginUser = async (
     const { email, password } = req.body;
 
     try {
-        console.log(email)
+        console.log(email);
         const userFound = await User.findOne({
             email: email,
-            isArchived: false
+            isArchived: false,
         });
         console.log(userFound);
         if (userFound) {
@@ -89,32 +89,30 @@ export const loginUser = async (
             );
 
             if (passwordMatched) {
-                const token = generateToken(userFound._id)
-                if(token) {
+                const token = generateToken(userFound._id);
+                if (token) {
                     return res.status(SUCCESS).json({
                         success: true,
                         message: label.auth.loginSuccessful,
                         developerMessage: "",
                         result: [],
                         token: token,
-                        permissionLevel: userFound.permissionLevel
+                        permissionLevel: userFound.permissionLevel,
                     });
                 } else {
                     res.status(INTERNAL_SERVER_ERROR).json({
                         success: false,
                         message: label.auth.noTokenFound,
                         developerMessage: "",
-                        result: []
+                        result: [],
                     });
                 }
-                    
-                
             } else {
                 res.status(BAD_REQUEST).json({
                     success: false,
                     message: label.auth.emailPasswordError,
                     developerMessage: "",
-                    result: []
+                    result: [],
                 });
             }
         } else {
@@ -123,7 +121,7 @@ export const loginUser = async (
                 success: false,
                 message: label.auth.noUserFound,
                 developerMessage: "",
-                result: []
+                result: [],
             });
         }
     } catch (error) {
@@ -131,7 +129,7 @@ export const loginUser = async (
             success: false,
             message: label.auth.loginError,
             developerMessage: error.message,
-            result: []
+            result: [],
         });
     }
 };

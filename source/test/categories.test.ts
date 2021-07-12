@@ -14,28 +14,18 @@ afterAll(async () => {
     await mongoose.connection.close();
 });
 
-describe("POST /user", () => {
-    describe("when users try to register", () => {
+describe("APIs /categories", () => {
+    describe("when admin tries to add categories", () => {
         test("should respond with a 201 status code", async () => {
             const response = await request(app)
-                .post("/api/v1/user/register")
+                .post("/api/v1/category")
+                .attach("authorization", "Bearer token paste garna paryo")
                 .send({
-                    email: "testing@testing.com",
-                    password: "testing",
+                    category: "Non Fiction",
+                    slug: "non-fiction",
+                    image: "http://randomimage.com/",
                 });
             expect(response.statusCode).toBe(201);
-        });
-    });
-
-    describe("when users try to login", () => {
-        test("should respond with a 200 status code", async () => {
-            const response = await request(app)
-                .post("/api/v1/user/login")
-                .send({
-                    email: "testing@testing.com",
-                    password: "testing",
-                });
-            expect(response.statusCode).toBe(200);
         });
     });
 });
