@@ -13,9 +13,9 @@ export const userValidation = (data: any): ErrorType => {
             error.status = true;
             error.message = label.auth.validation("Email");
         }
-        if (isEmail(data?.fullName)) {
+        if (!isEmail(data?.email)) {
             error.status = true;
-            error.message = label.auth.validation("Email");
+            error.message = label.auth.invalidEmail;
         }
     } else {
         error.status = true;

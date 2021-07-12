@@ -17,5 +17,6 @@ export default {
         invalidToken: "The token provided is invalid.",
         accessNotGranted: "Access not granted to perform the operation.",
         validation: (field: string) => `${field} is required.`,
+        invalidEmail: "Provided Email is Invalid.",
     },
 };
