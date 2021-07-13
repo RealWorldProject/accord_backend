@@ -19,4 +19,8 @@ export default {
         validation: (field: string) => `${field} is required.`,
         invalidEmail: "Provided Email is Invalid.",
     },
+    postBook: {
+        couldNotPostBook: "Sorry, Book could not be posted. Please Try Again.",
+        bookPosted: "Your book has been posted successfully."
+    },
 };
