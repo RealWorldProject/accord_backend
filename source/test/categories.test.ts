@@ -3,14 +3,17 @@ import app from "../app/app";
 import mongoose from "mongoose";
 
 beforeAll(async () => {
-    await mongoose.connect("mongodb://localhost:27017/test_database", {
-        useNewUrlParser: true,
-        useCreateIndex: true,
-        useUnifiedTopology: true,
-    });
+    await mongoose.connect(
+        "mongodb://localhost:27017/application_development",
+        {
+            useNewUrlParser: true,
+            useCreateIndex: true,
+            useUnifiedTopology: true,
+        }
+    );
 });
 afterAll(async () => {
-    await mongoose.connection.dropDatabase();
+    // await mongoose.connection.dropDatabase();
     await mongoose.connection.close();
 });
 

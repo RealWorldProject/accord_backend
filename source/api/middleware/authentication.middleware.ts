@@ -15,8 +15,6 @@ export const authenticateToken = async (
         if (!authorization) {
             throw new Error(label.auth.noTokenFound);
         } else {
-            console.log(authorization);
-            
             const decodedJwt: any = jwt.verify(
                 authorization,
                 process?.env?.ACCESS_TOKEN_SECRET as string
@@ -26,6 +24,7 @@ export const authenticateToken = async (
                     _id: decodedJwt.id,
                     isArchived: false,
                 });
+                console.log(user, decodedJwt);
                 if (user) {
                     req.currentUser = user;
                 } else {
