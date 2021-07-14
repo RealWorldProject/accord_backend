@@ -28,5 +28,8 @@ export default {
         validation: (field: string) => `${field} is required.`,
         invalidCategoryName: "Invalid Category Name. Please use a name with only alphabets & space.",
         invalidSlug: "Provided Slug is invalid. Please use a slug with only lower-alphabets & hyphen(-).",
+        viewAllCategories: "Showing all Categories.",
+        emptyCategory: "No Categories available at the moment. Please contact Admin for new Categories.",
+        viewCategoriesError: "Sorry, could not view categories at the moment. Please Try Again.",
     },
 };

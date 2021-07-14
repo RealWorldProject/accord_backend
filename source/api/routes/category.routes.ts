@@ -14,6 +14,7 @@ import {
 } from "../middleware/authentication.middleware";
 import {
     addCategory,
+    viewCategory,
 } from "../controllers/category.controllers";
 
 const categoryRoutes = express.Router();
@@ -26,5 +27,11 @@ categoryRoutes.post(
     checkCategoryUniqueness,
     addCategory
 );
+
+categoryRoutes.get(
+    VIEW_CATEGORY,
+    authenticateToken,
+    viewCategory
+)
 
 export = categoryRoutes;
