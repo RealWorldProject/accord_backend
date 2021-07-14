@@ -4,4 +4,6 @@ import { postBook } from "../controllers/postBook.controllers";
 
 const postBookRoutes = express.Router();
 
-postBookRoutes.post(POST_BOOK, postBook)
+postBookRoutes.post(POST_BOOK, postBook);
+
+export = postBookRoutes;

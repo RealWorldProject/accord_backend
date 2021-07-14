@@ -21,6 +21,7 @@ export default {
     },
     postBook: {
         couldNotPostBook: "Sorry, Book could not be posted. Please Try Again.",
-        bookPosted: "Your book has been posted successfully."
+        bookPosted: "Your book has been posted successfully.",
+        FileNotSupported: "Invalid file format, Please upload valid files."
     },
 };

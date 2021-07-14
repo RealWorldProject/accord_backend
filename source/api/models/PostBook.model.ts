@@ -16,46 +16,49 @@ export interface PostBookDocument extends PostBookData, mongoose.Document {
     isArchived: boolean;
 }
 
-export const postBookSchema = new mongoose.Schema({
-    name: {
-        type: String,
-        required: true,
-        unique: true,
+export const postBookSchema = new mongoose.Schema(
+    {
+        name: {
+            type: String,
+            required: true,
+        },
+        price: {
+            type: Number,
+            required: true,
+        },
+        image: {
+            type: String,
+            required: true,
+        },
+        description: {
+            type: String,
+            required: true,
+        },
+        author: {
+            type: String,
+            required: true,
+        },
+        isArchived: {
+            type: Boolean,
+            required: true,
+            default: false,
+        },
+        userId: {
+            type: mongoose.Schema.Types.ObjectId,
+            required: true,
+            ref: "user",
+        },
+        category: {
+            type: mongoose.Schema.Types.ObjectId,
+            required: false,
+            ref: "category",
+        },
     },
-    price: {
-        type: Number,
-        required: true,
-    },
-    image: {
-        type: String,
-        required: true,
-    },
-    description: {
-        type: String,
-        required: true,
-    },
-    author: {
-        type: String,
-        required: true,
-    },
-    isArchived: {
-        type: Boolean,
-        required: true,
-        default: false,
-    },
-    userId: {
-        type: mongoose.Schema.Types.ObjectId,
-        required: true,
-        ref: "user",
-    },
-    category: {
-        type: mongoose.Schema.Types.ObjectId,
-        required: true,
-        ref: "category",
-    },
-    timestamps: true,
-});
+    {
+        timestamps: true,
+    }
+);
 
-const Book = mongoose.model<PostBookDocument>("book", postBookSchema);
+const PostBook = mongoose.model<PostBookDocument>("postBook", postBookSchema);
 
-export default Book;
+export default PostBook;

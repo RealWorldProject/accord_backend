@@ -1,6 +1,7 @@
 import express, { Request, Response, NextFunction } from "express";
 import morgan from "morgan";
 import userRoutes from "../api/routes/user.routes";
+import postBookRoutes from "../api/routes/postBook.routes";
 import dotenv from "dotenv";
 import path from "path";
 
@@ -31,5 +32,6 @@ if (env === "development") {
 // adding routes
 
 app.use(VERSION, userRoutes);
+app.use(VERSION, postBookRoutes);
 
 export default app;
