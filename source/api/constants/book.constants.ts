@@ -1,1 +1,1 @@
-export const POST_BOOK = "/user/post-book";
+export const POST_BOOK = "/book";

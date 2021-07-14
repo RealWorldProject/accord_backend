@@ -1,13 +1,14 @@
 import mongoose, { ObjectId } from "mongoose";
+import { UserDocument } from "./User.model";
 
 export interface PostBookData {
     name: string;
     price: number;
-    image: string;
+    images: string[];
     description: string;
     author: string;
-    userId: ObjectId;
-    category: ObjectId;
+    userId: string | UserDocument;
+    category: string;
 }
 
 export interface PostBookDocument extends PostBookData, mongoose.Document {
@@ -26,10 +27,7 @@ export const postBookSchema = new mongoose.Schema(
             type: Number,
             required: true,
         },
-        image: {
-            type: String,
-            required: true,
-        },
+        images: [String],
         description: {
             type: String,
             required: true,

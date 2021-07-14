@@ -13,30 +13,33 @@ export const postBook = async (
     next: NextFunction
 ) => {
     try {
-        const { name, price, description, author, userId, category } = req.body;
+        const { name, price, images, description, author, category } = req.body;
 
         const postBookObj = new PostBook({
             name,
             price,
-            image: "dummy.png",
+            images,
             description,
             author,
-            userId,
             category,
+            userId: req.currentUser._id
         });
         const postBook = await postBookObj.save();
-        return res.status(CREATED).json({
-            success: true,
-            message: label.postBook.bookPosted,
-            developerMessage: "",
-            result: [],
-        });
+        if (postBook) {
+            return res.status(CREATED).json({
+                success: true,
+                message: label.postBook.bookPosted,
+                developerMessage: "",
+                result: postBook
+            });
+        }
+        
     } catch (error) {
         res.status(INTERNAL_SERVER_ERROR).json({
             success: false,
             message: label.postBook.couldNotPostBook,
             developerMessage: error.message,
-            result: [],
+            result: {},
         });
     }
 };
