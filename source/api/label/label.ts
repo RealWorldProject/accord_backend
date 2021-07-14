@@ -19,4 +19,14 @@ export default {
         validation: (field: string) => `${field} is required.`,
         invalidEmail: "Provided Email is Invalid.",
     },
+
+    category: {
+        couldNotAddCategory: "Sorry, Category could not be added. Please Try Again.",
+        categoryAdded: "A New Category had been added.",
+        categoryNameAlreadyExists: "Category with the same name already exists. Please use a different name.",
+        slugAlreadyExists: "Slug is already taken. Please use a different Slug.",
+        validation: (field: string) => `${field} is required.`,
+        invalidCategoryName: "Invalid Category Name. Please use a name with only alphabets & space.",
+        invalidSlug: "Provided Slug is invalid. Please use a slug with only lower-alphabets & hyphen(-).",
+    },
 };
