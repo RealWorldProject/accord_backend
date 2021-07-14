@@ -1,5 +1,6 @@
 import { error } from "console";
 import { Request, Response, NextFunction } from "express";
+import { errorMonitor } from "stream";
 import { SUCCESS, 
     INTERNAL_SERVER_ERROR, 
     CREATED, 
@@ -16,36 +17,19 @@ export const addCategory = async (
 ) => {
     try {
         const { category, slug, image } = req.body;
-        const categoryExists = await Category.findOne({ category, isArchived: false });
-        const slugExists = await Category.findOne({ slug, isArchived: false });
-        // checking if category label exists
-        if (categoryExists) {
-            return res.status(BAD_REQUEST).json({
-                success: false,
-                message: label.category.categoryNameAlreadyExists,
-                developerMessage: "",
-                result: [],
-            })
-        }
-        // checking if slug label exists
-        else if (slugExists) {
-            return res.status(BAD_REQUEST).json({
-                success: false,
-                message: label.category.slugAlreadyExists,
-                developerMessage: "",
-                result: [],
-            })
-        } else {
-            const categoryObj = new Category({
-                category,
-                slug,
-                image,
-            }).save();
+
+        const categoryObj = new Category({
+            category,
+            slug,
+            image,
+        });
+        const newCategory = await categoryObj.save();
+        if (newCategory) {
             return res.status(CREATED).json({
                 success: true,
                 message: label.category.categoryAdded,
                 developerMessage: "",
-                result: [],
+                result: newCategory,
             });
         }
     }
@@ -55,7 +39,7 @@ export const addCategory = async (
             success: false,
             message: label.category.couldNotAddCategory,
             developerMessage: error.message,
-            result: [],
-        })
+            result: {},
+        });
     }
 };

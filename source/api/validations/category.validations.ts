@@ -34,5 +34,15 @@ export const categoryValidation = (data: any): ErrorType => {
         error.message = label.category.validation("Slug");
     }
 
+    if (data.hasOwnProperty("image")) {
+        if (isEmpty(data?.image)) {
+            error.status = true;
+            error.message = label.category.validation("Image");
+        }
+    } else {
+        error.status = true;
+        error.message = label.category.validation("Image");
+    }
+
     return error;
 };
