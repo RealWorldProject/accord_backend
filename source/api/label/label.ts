@@ -23,6 +23,7 @@ export default {
         couldNotPostBook: "Sorry, Book could not be posted. Please Try Again.",
         bookPosted: "Your book has been posted successfully.",
         validation: (field: string) => `${field} is required.`,
-        requireNumber:"Please enter the number value only."
+        requireNumber: "Please enter the number value only.",
+        chooseCategory: "Please choose the category of book."
     },
 };

@@ -6,6 +6,11 @@ import { validatePostBookBody } from "../middleware/postBook.middlewares";
 
 const postBookRoutes = express.Router();
 
-postBookRoutes.post(POST_BOOK, authenticateToken, validatePostBookBody, postBook);
+postBookRoutes.post(
+    POST_BOOK,
+    authenticateToken,
+    validatePostBookBody,
+    postBook
+);
 
 export = postBookRoutes;

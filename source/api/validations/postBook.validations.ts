@@ -56,6 +56,15 @@ export const postBookValidation = (data: any): ErrorType => {
     } else {
         error.status = true;
         error.message = label.postBook.validation("Author");
+    }  
+    if (data.hasOwnProperty("category")) {
+        if (isEmpty(data?.category)) {
+            error.status = true;
+            error.message = label.postBook.chooseCategory;
+        }
+    } else {
+        error.status = true;
+        error.message = label.postBook.validation("Category");
     }
 
     return error;

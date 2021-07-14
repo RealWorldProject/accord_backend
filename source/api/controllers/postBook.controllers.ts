@@ -22,7 +22,7 @@ export const postBook = async (
             description,
             author,
             category,
-            userId: req.currentUser._id
+            userId: req.currentUser._id,
         });
         const postBook = await postBookObj.save();
         if (postBook) {
@@ -30,10 +30,9 @@ export const postBook = async (
                 success: true,
                 message: label.postBook.bookPosted,
                 developerMessage: "",
-                result: postBook
+                result: postBook,
             });
         }
-        
     } catch (error) {
         res.status(INTERNAL_SERVER_ERROR).json({
             success: false,

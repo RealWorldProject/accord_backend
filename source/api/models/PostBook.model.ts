@@ -48,7 +48,7 @@ export const postBookSchema = new mongoose.Schema(
         },
         category: {
             type: mongoose.Schema.Types.ObjectId,
-            required: false,
+            required: true,
             ref: "category",
         },
     },

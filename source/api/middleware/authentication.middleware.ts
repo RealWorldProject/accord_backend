@@ -15,6 +15,8 @@ export const authenticateToken = async (
         if (!authorization) {
             throw new Error(label.auth.noTokenFound);
         } else {
+            console.log(authorization);
+            
             const decodedJwt: any = jwt.verify(
                 authorization,
                 process?.env?.ACCESS_TOKEN_SECRET as string
