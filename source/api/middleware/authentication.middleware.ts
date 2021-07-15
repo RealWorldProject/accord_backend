@@ -24,6 +24,7 @@ export const authenticateToken = async (
                     _id: decodedJwt.id,
                     isArchived: false,
                 });
+                console.log(user, decodedJwt);
                 if (user) {
                     req.currentUser = user;
                 } else {

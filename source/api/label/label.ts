@@ -20,6 +20,12 @@ export default {
         invalidEmail: "Provided Email is Invalid.",
     },
 
+    postBook: {
+        couldNotPostBook: "Sorry, Book could not be posted. Please Try Again.",
+        bookPosted: "Your book has been posted successfully.",
+        validation: (field: string) => `${field} is required.`,
+        requireNumber: "Please enter the number value only.",
+    },
     category: {
         couldNotAddCategory: "Sorry, Category could not be added. Please Try Again.",
         categoryAdded: "A New Category had been added.",
@@ -31,5 +37,6 @@ export default {
         viewAllCategories: "Showing all Categories.",
         emptyCategory: "No Categories available at the moment. Please contact Admin for new Categories.",
         viewCategoriesError: "Sorry, could not view categories at the moment. Please Try Again.",
+
     },
 };
