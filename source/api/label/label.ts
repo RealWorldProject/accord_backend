@@ -48,7 +48,5 @@ export default {
         categoryNotFound: "Category does not exist to update.",
         categoryDeleted: "A Category has been deleted.",
         couldNotDeleteCategory: "Sorry, Category could not be deleted. Please Try Again.",
-        emptyCategory: "No Categories available at the moment. Please contact Admin for new Categories.",
-        viewCategoriesError: "Sorry, could not view categories at the moment. Please Try Again.",
     },
 };
