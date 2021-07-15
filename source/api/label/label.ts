@@ -36,5 +36,8 @@ export default {
             "No Categories available at the moment. Please contact Admin for new Categories.",
         couldNotViewCategories:
             "Sorry, could not view categories at the moment. Please Try Again.",
+        categoryUpdated: "Category has been updated.",
+        couldNotUpdateCategory: "Sorry, Category could not be updated. Please Try Again.",
+        categoryNotFound: "Category does not exist to update.",
     },
 };

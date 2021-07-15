@@ -15,6 +15,7 @@ import {
 import {
     addCategory,
     viewCategory,
+    updateCategory,
 } from "../controllers/category.controllers";
 
 const categoryRoutes = express.Router();
@@ -32,6 +33,15 @@ categoryRoutes.get(
     VIEW_CATEGORY,
     authenticateToken,
     viewCategory
+)
+
+categoryRoutes.put(
+    UPDATE_DELETE_CATEGORY,
+    authenticateToken,
+    isAdmin,
+    validateCategoryBody,
+    checkCategoryUniqueness,
+    updateCategory
 )
 
 export = categoryRoutes;
