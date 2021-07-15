@@ -1,4 +1,5 @@
 import mongoose, { ObjectId } from "mongoose";
+import { CategoryDocument } from "./Category.model";
 import { UserDocument } from "./User.model";
 
 export interface PostBookData {
@@ -8,7 +9,7 @@ export interface PostBookData {
     description: string;
     author: string;
     userId: string | UserDocument;
-    category: string;
+    category: string | CategoryDocument;
 }
 
 export interface PostBookDocument extends PostBookData, mongoose.Document {
@@ -35,6 +36,20 @@ export const postBookSchema = new mongoose.Schema(
         author: {
             type: String,
             required: true,
+        },
+        status: {
+            type: String,
+            enum: ["VERIFIED", "REJECTED", "PENDING"],
+            default: "PENDING",
+            required: true,
+        },
+        isNEW: {
+            type: Boolean,
+            required: true,
+        },
+        isAvailableForExchange: {
+            type: Boolean,
+            required: true
         },
         isArchived: {
             type: Boolean,

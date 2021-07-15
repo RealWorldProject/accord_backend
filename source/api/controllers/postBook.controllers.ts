@@ -13,7 +13,16 @@ export const postBook = async (
     next: NextFunction
 ) => {
     try {
-        const { name, price, images, description, author, category } = req.body;
+        const {
+            name,
+            price,
+            images,
+            description,
+            author,
+            category,
+            isNEW,
+            isAvailableForExchange,
+        } = req.body;
 
         const postBookObj = new PostBook({
             name,
@@ -22,6 +31,9 @@ export const postBook = async (
             description,
             author,
             category,
+            isNEW,
+            isAvailableForExchange,
+            status: "PENDING",
             userId: req.currentUser._id,
         });
         const postBook = await postBookObj.save();
