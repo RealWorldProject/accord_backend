@@ -16,6 +16,7 @@ import {
     addCategory,
     viewCategory,
     updateCategory,
+    deleteCategory,
 } from "../controllers/category.controllers";
 
 const categoryRoutes = express.Router();
@@ -33,7 +34,7 @@ categoryRoutes.get(
     VIEW_CATEGORY,
     authenticateToken,
     viewCategory
-)
+);
 
 categoryRoutes.put(
     UPDATE_DELETE_CATEGORY,
@@ -42,6 +43,13 @@ categoryRoutes.put(
     validateCategoryBody,
     checkCategoryUniqueness,
     updateCategory
-)
+);
+
+categoryRoutes.delete(
+    UPDATE_DELETE_CATEGORY,
+    authenticateToken,
+    isAdmin,
+    deleteCategory
+);
 
 export = categoryRoutes;

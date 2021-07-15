@@ -6,7 +6,7 @@ export const categoryValidation = (data: any): ErrorType => {
     let error: ErrorType = {
         status: false,
         message: "",
-    }
+    };
 
     if (data.hasOwnProperty("category")) {
         if (isEmpty(data?.category)) {
