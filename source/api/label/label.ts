@@ -20,6 +20,13 @@ export default {
         invalidEmail: "Provided Email is Invalid.",
     },
 
+    postBook: {
+        couldNotPostBook: "Sorry, Book could not be posted. Please Try Again.",
+        bookPosted: "Your book has been posted successfully.",
+        validation: (field: string) => `${field} is required.`,
+        requireNumber: "Please enter the number value only.",
+        chooseCategory:"Please the category of your book."
+    },
     category: {
         couldNotAddCategory: "Sorry, Category could not be added. Please Try Again.",
         categoryAdded: "A New Category had been added.",
@@ -41,5 +48,7 @@ export default {
         categoryNotFound: "Category does not exist to update.",
         categoryDeleted: "A Category has been deleted.",
         couldNotDeleteCategory: "Sorry, Category could not be deleted. Please Try Again.",
+        emptyCategory: "No Categories available at the moment. Please contact Admin for new Categories.",
+        viewCategoriesError: "Sorry, could not view categories at the moment. Please Try Again.",
     },
 };
