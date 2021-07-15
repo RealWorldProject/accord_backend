@@ -44,7 +44,7 @@ export const viewCategory = async (req: Request, res: Response) => {
     const limit: number = parseInt(req?.query.limit as string) || 0;
 
     try {
-        const categoryList = await Category.find()
+        const categoryList = await Category.find({ isArchived: false })
             .skip(page * limit - limit)
             .limit(limit);
         const totalCategories = categoryList.length;
