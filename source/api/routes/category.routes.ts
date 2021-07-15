@@ -2,15 +2,15 @@ import express from "express";
 import {
     ADD_CATEGORY,
     VIEW_CATEGORY,
-    DELETE_CATEGORY
+    UPDATE_DELETE_CATEGORY,
 } from "../constants/category.constants";
 import {
     validateCategoryBody,
-    checkCategoryUniqueness
+    checkCategoryUniqueness,
 } from "../middleware/category.middleware";
 import {
     authenticateToken,
-    isAdmin
+    isAdmin,
 } from "../middleware/authentication.middleware";
 import {
     addCategory,
