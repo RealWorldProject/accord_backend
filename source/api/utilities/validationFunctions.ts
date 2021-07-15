@@ -3,6 +3,8 @@ import {
     STRING_REGEX,
     EMAIL_REGEX,
     PHONE_REGEX,
+    CATEGORY_REGEX,
+    SLUG_REGEX,
 } from "../constants/regex";
 
 export const isEmpty = (value: any): boolean =>
@@ -49,6 +51,28 @@ export const isPhoneNumber = (value: number): boolean => {
     if (trimmedValue?.length === 0) {
         return false;
     } else if (PHONE_REGEX.test(trimmedValue)) {
+        return true;
+    } else {
+        return false;
+    }
+};
+
+export const isValidCategoryName = (value: string): boolean => {
+    const trimmedValue = value?.toString()?.trim();
+    if (trimmedValue?.length === 0) {
+        return false;
+    } else if (CATEGORY_REGEX.test(trimmedValue)) {
+        return true;
+    } else {
+        return false;
+    }
+};
+
+export const isValidSlug = (value: string): boolean => {
+    const trimmedValue = value?.toString()?.trim();
+    if (trimmedValue?.length === 0) {
+        return false;
+    } else if (SLUG_REGEX.test(trimmedValue)) {
         return true;
     } else {
         return false;

@@ -7,3 +7,7 @@ export const DOMAIN_NAME_REGEX = /^(?<domain>(?<domain_sub>(?:[^\/\"\]:\.\s\|\-]
 export const EMAIL_REGEX = /(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@[*[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+]*/;
 
 export const PHONE_REGEX = /^[0-9]{10}$/;
+
+export const CATEGORY_REGEX = /^[\sa-zA-Z]+$/;
+
+export const SLUG_REGEX = /^[-a-z]+$/;

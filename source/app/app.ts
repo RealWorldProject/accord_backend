@@ -4,6 +4,7 @@ import userRoutes from "../api/routes/user.routes";
 import postBookRoutes from "../api/routes/postBook.routes";
 import dotenv from "dotenv";
 import path from "path";
+import categoryRoutes from "../api/routes/category.routes";
 
 const VERSION = "/api/v1";
 
@@ -30,8 +31,8 @@ if (env === "development") {
 }
 
 // adding routes
-
 app.use(VERSION, userRoutes);
 app.use(VERSION, postBookRoutes);
+app.use(VERSION, categoryRoutes);
 
 export default app;

@@ -28,6 +28,10 @@ export const categorySchema = new mongoose.Schema(
             type: String,
             required: false,
         },
+        image: {
+            type: String,
+            required: false,
+        },
         isArchived: {
             type: Boolean,
             required: true,
