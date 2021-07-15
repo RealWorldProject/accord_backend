@@ -30,8 +30,9 @@ export const checkCategoryUniqueness = async (
     next: NextFunction
 ) => {
     const { category, slug } = req.body;
-    const categoryExists = await Category.findOne({ category });
-    const slugExists = await Category.findOne({ slug });
+    const categoryExists = await Category.findOne({ category, isArchived: false });
+    const slugExists = await Category.findOne({ slug, isArchived: false });
+    
     if (categoryExists) {
         const categoryExistsMessage = label.category.categoryNameAlreadyExists;
         return res.status(BAD_REQUEST).json({

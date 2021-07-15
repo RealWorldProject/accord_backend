@@ -2,19 +2,21 @@ import express from "express";
 import {
     ADD_CATEGORY,
     VIEW_CATEGORY,
-    DELETE_CATEGORY
+    UPDATE_DELETE_CATEGORY,
 } from "../constants/category.constants";
 import {
     validateCategoryBody,
-    checkCategoryUniqueness
+    checkCategoryUniqueness,
 } from "../middleware/category.middleware";
 import {
     authenticateToken,
-    isAdmin
+    isAdmin,
 } from "../middleware/authentication.middleware";
 import {
     addCategory,
     viewCategory,
+    updateCategory,
+    deleteCategory,
 } from "../controllers/category.controllers";
 
 const categoryRoutes = express.Router();
@@ -32,6 +34,22 @@ categoryRoutes.get(
     VIEW_CATEGORY,
     authenticateToken,
     viewCategory
-)
+);
+
+categoryRoutes.put(
+    UPDATE_DELETE_CATEGORY,
+    authenticateToken,
+    isAdmin,
+    validateCategoryBody,
+    checkCategoryUniqueness,
+    updateCategory
+);
+
+categoryRoutes.delete(
+    UPDATE_DELETE_CATEGORY,
+    authenticateToken,
+    isAdmin,
+    deleteCategory
+);
 
 export = categoryRoutes;
