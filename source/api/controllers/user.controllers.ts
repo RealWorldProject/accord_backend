@@ -1,4 +1,5 @@
 import { Request, Response, NextFunction } from "express";
+import { ADMIN_PERMISSION_LEVEL } from "../constants/global.constant";
 import {
     SUCCESS,
     BAD_REQUEST,
@@ -142,13 +143,11 @@ export const loginAdmin = async (
     const { email, password } = req.body;
 
     try {
-        console.log(email);
         const userFound = await User.findOne({
             email: email,
-            permissionLevel:0,
+            permissionLevel:ADMIN_PERMISSION_LEVEL,
             isArchived: false,
         });
-        console.log(userFound);
         if (userFound) {
             const plainPassword = password;
             const hashedPassword = userFound.password;
