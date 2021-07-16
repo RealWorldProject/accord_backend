@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import {
     SUCCESS,
-    INTERNAL_SERVER_ERROR, 
+    INTERNAL_SERVER_ERROR,
     CREATED,
 } from "../constants/status-codes.constants";
 import label from "../label/label";
@@ -26,8 +26,7 @@ export const addCategory = async (req: Request, res: Response) => {
                 result: newCategory,
             });
         }
-    }
-    catch (error) {
+    } catch (error) {
         console.error(error);
         res.status(INTERNAL_SERVER_ERROR).json({
             success: false,
@@ -48,7 +47,7 @@ export const viewCategory = async (req: Request, res: Response) => {
             .skip(page * limit - limit)
             .limit(limit);
         const totalCategories = categoryList.length;
-        
+
         if (totalCategories > 0) {
             return res.status(SUCCESS).json({
                 success: true,
@@ -124,7 +123,7 @@ export const updateCategory = async (req: Request, res: Response) => {
 // ************************DELETE CATEGORY****************************
 export const deleteCategory = async (req: Request, res: Response) => {
     const categoryID = req.params.categoryID;
-    
+
     try {
         const selectedCategory = await Category.findOne({
             _id: categoryID,
