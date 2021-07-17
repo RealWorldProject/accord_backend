@@ -12,6 +12,7 @@ export default {
 
         noTokenFound: "Cannot Sign a token.",
         noUserFound: "User Is not Found.",
+        notAdmin: "Not an Admin",
         tokenDidNotMatch: "Token sent did not match.",
         authenticationFailed: "Could not authenticate user.",
         invalidToken: "The token provided is invalid.",

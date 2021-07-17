@@ -1,4 +1,5 @@
 import { Request, Response, NextFunction } from "express";
+import { ADMIN_PERMISSION_LEVEL } from "../constants/global.constant";
 import {
     SUCCESS,
     BAD_REQUEST,
@@ -133,3 +134,71 @@ export const loginUser = async (
         });
     }
 };
+// login for admin
+export const loginAdmin = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+) => {
+    const { email, password } = req.body;
+
+    try {
+        const userFound = await User.findOne({
+            email: email,
+            permissionLevel:ADMIN_PERMISSION_LEVEL,
+            isArchived: false,
+        });
+        if (userFound) {
+            const plainPassword = password;
+            const hashedPassword = userFound.password;
+            const passwordMatched = await decryptPassword(
+                plainPassword,
+                hashedPassword
+            );
+
+            if (passwordMatched) {
+                const token = generateToken(userFound._id);
+                if (token) {
+                    return res.status(SUCCESS).json({
+                        success: true,
+                        message: label.auth.loginSuccessful,
+                        developerMessage: "",
+                        result: [],
+                        token: token,
+                        permissionLevel: userFound.permissionLevel,
+                    });
+                } else {
+                    res.status(INTERNAL_SERVER_ERROR).json({
+                        success: false,
+                        message: label.auth.noTokenFound,
+                        developerMessage: "",
+                        result: [],
+                    });
+                }
+            } else {
+                res.status(BAD_REQUEST).json({
+                    success: false,
+                    message: label.auth.emailPasswordError,
+                    developerMessage: "",
+                    result: [],
+                });
+            }
+        } else {
+            // user not found
+            res.status(INTERNAL_SERVER_ERROR).json({
+                success: false,
+                message: label.auth.notAdmin,
+                developerMessage: "",
+                result: [],
+            });
+        }
+    } catch (error) {
+        res.status(INTERNAL_SERVER_ERROR).json({
+            success: false,
+            message: label.auth.loginError,
+            developerMessage: error.message,
+            result: [],
+        });
+    }
+};
+
