@@ -56,7 +56,7 @@ export const postBookValidation = (data: any): ErrorType => {
     } else {
         error.status = true;
         error.message = label.postBook.validation("Author");
-    }  
+    }
     if (data.hasOwnProperty("category")) {
         if (isEmpty(data?.category)) {
             error.status = true;
@@ -67,5 +67,23 @@ export const postBookValidation = (data: any): ErrorType => {
         error.message = label.postBook.validation("Category");
     }
 
+    return error;
+};
+
+export const rejectBookValidation = (data: any): ErrorType => {
+    let error: ErrorType = {
+        status: false,
+        message: "",
+    };
+
+    if (data.hasOwnProperty("rejectionMessage")) {
+        if (isEmpty(data?.rejectionMessage)) {
+            error.status = true;
+            error.message = label.postBook.rejectionMessage;
+        }
+    } else {
+        error.status = true;
+        error.message = label.postBook.rejectionMessage;
+    }
     return error;
 };

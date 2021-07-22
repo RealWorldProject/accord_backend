@@ -13,6 +13,7 @@ export default {
         noTokenFound: "Cannot Sign a token.",
         noUserFound: "User Is not Found.",
         notAdmin: "Not an Admin",
+        error: "Something went wrong, Please try Again",
         tokenDidNotMatch: "Token sent did not match.",
         authenticationFailed: "Could not authenticate user.",
         invalidToken: "The token provided is invalid.",
@@ -22,18 +23,30 @@ export default {
     },
 
     postBook: {
+        bookFetch: "Books Were Fetched.",
+        bookFetchError:
+            "Sorry, The books could not be Fetched. Please Try Again.",
+        bookVerified: "The Book is verified.",
+        bookVerificationError:
+            "Sorry, The book couldn't be verified. Please Try Again",
+        bookRejected: "The Book is Rejected.",
+        bookRejectionError:
+            "Sorry, The book couldn't be rejected. Please Try Again",
+        rejectionMessage: "Please provide a rejection message.",
         couldNotPostBook: "Sorry, Book could not be posted. Please Try Again.",
         bookPosted: "Your book has been posted successfully.",
         validation: (field: string) => `${field} is required.`,
         requireNumber: "Please enter the number value only.",
-        chooseCategory:"Please the category of your book."
+        chooseCategory: "Please the category of your book.",
     },
     category: {
-        couldNotAddCategory: "Sorry, Category could not be added. Please Try Again.",
+        couldNotAddCategory:
+            "Sorry, Category could not be added. Please Try Again.",
         categoryAdded: "A New Category had been added.",
         categoryNameAlreadyExists:
             "Category with the same name already exists. Please use a different name.",
-        slugAlreadyExists: "Slug is already taken. Please use a different Slug.",
+        slugAlreadyExists:
+            "Slug is already taken. Please use a different Slug.",
         validation: (field: string) => `${field} is required.`,
         invalidCategoryName:
             "Invalid Category Name. Please use a name with only alphabets & space.",
@@ -45,9 +58,11 @@ export default {
         couldNotViewCategories:
             "Sorry, could not view categories at the moment. Please Try Again.",
         categoryUpdated: "A Category has been updated.",
-        couldNotUpdateCategory: "Sorry, Category could not be updated. Please Try Again.",
+        couldNotUpdateCategory:
+            "Sorry, Category could not be updated. Please Try Again.",
         categoryNotFound: "Category does not exist to update.",
         categoryDeleted: "A Category has been deleted.",
-        couldNotDeleteCategory: "Sorry, Category could not be deleted. Please Try Again.",
+        couldNotDeleteCategory:
+            "Sorry, Category could not be deleted. Please Try Again.",
     },
 };
