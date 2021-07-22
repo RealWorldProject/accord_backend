@@ -5,8 +5,9 @@ export default async (MONGO_URI: string) => {
         await mongoose.connect(MONGO_URI, {
             useNewUrlParser: true,
             useUnifiedTopology: true,
+            useCreateIndex: true,
         });
-        console.info(`MongoDB is connected\n URI: ${MONGO_URI}`);
+        console.info(`MongoDB is connected\nURI: ${MONGO_URI}`);
     } catch (error) {
         console.error(error);
     }

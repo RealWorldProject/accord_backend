@@ -6,6 +6,7 @@ import dotenv from "dotenv";
 import path from "path";
 import categoryRoutes from "../api/routes/category.routes";
 import uploadRoutes from "../api/routes/upload.routes";
+import database from "../database/database";
 
 const VERSION = "/api/v1";
 
@@ -36,5 +37,10 @@ app.use(VERSION, userRoutes);
 app.use(VERSION, postBookRoutes);
 app.use(VERSION, categoryRoutes);
 app.use(VERSION, uploadRoutes);
+
+// const mongoURI =
+//     process.env.MONGO_URI ||
+//     "mongodb+srv://accord:@gileGroup1@accord.opzad.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";
+// database(mongoURI);
 
 export default app;
