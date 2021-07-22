@@ -159,16 +159,21 @@ export const viewBooks = async (req: Request, res: Response) => {
     const page: number = parseInt(req?.query.page as string) || 1;
     const limit: number = parseInt(req?.query.limit as string) || 0;
 
-    const categoryID = req?.params?.categoryID;
+    const categoryID = req?.query?.categoryID as string;
+    const searchTerm = req?.query?.searchTerm as string;
 
     try {
-        const books = await PostBook.find({ category: categoryID, isArchived: false })
+        // trim object remove all the empty field in the object
+        const query = trimObject({
+            isArchived: false,
+            status: "VERIFIED",
+            category: categoryID,
+            name: new RegExp(searchTerm, "i"),
+        });
+        const books = await PostBook.find(query)
             .skip(page * limit - limit)
             .limit(limit);
-        const totalBooks = await PostBook.countDocuments({
-            category: categoryID,
-            isArchived: false
-        });
+        const totalBooks = await PostBook.countDocuments(query);
         if (books.length > 0 && totalBooks > 0) {
             return res.status(SUCCESS).json({
                 success: true,
@@ -181,7 +186,7 @@ export const viewBooks = async (req: Request, res: Response) => {
         } else {
             return res.status(SUCCESS).json({
                 success: true,
-                message: label.postBook.noBookInCategory,
+                message: label.postBook.noBook,
                 developerMessage: "",
                 result: [],
                 page,
@@ -197,4 +202,4 @@ export const viewBooks = async (req: Request, res: Response) => {
             result: [],
         });
     }
-}
+};
