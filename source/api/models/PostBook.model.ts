@@ -10,6 +10,10 @@ export interface PostBookData {
     author: string;
     userId: string | UserDocument;
     category: string | CategoryDocument;
+    status: string;
+    isNewBook: boolean;
+    isAvailableForExchange: boolean;
+    rejectionMessage: string;
 }
 
 export interface PostBookDocument extends PostBookData, mongoose.Document {
@@ -43,13 +47,13 @@ export const postBookSchema = new mongoose.Schema(
             default: "PENDING",
             required: true,
         },
-        isNEW: {
+        isNewBook: {
             type: Boolean,
             required: true,
         },
         isAvailableForExchange: {
             type: Boolean,
-            required: true
+            required: true,
         },
         isArchived: {
             type: Boolean,
@@ -65,6 +69,10 @@ export const postBookSchema = new mongoose.Schema(
             type: mongoose.Schema.Types.ObjectId,
             required: true,
             ref: "category",
+        },
+        rejectionMessage: {
+            type: String,
+            required: false,
         },
     },
     {

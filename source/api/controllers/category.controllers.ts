@@ -46,7 +46,9 @@ export const viewCategory = async (req: Request, res: Response) => {
         const categoryList = await Category.find({ isArchived: false })
             .skip(page * limit - limit)
             .limit(limit);
-        const totalCategories = categoryList.length;
+        const totalCategories = await Category.countDocuments({
+            isArchived: false,
+        });
 
         if (totalCategories > 0) {
             return res.status(SUCCESS).json({
