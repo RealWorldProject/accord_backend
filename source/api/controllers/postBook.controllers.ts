@@ -152,3 +152,47 @@ export const rejectBook = async (req: Request, res: Response) => {
         });
     }
 };
+
+export const viewBooks = async (req: Request, res: Response) => {
+    const page: number = parseInt(req?.query.page as string) || 1;
+    const limit: number = parseInt(req?.query.limit as string) || 0;
+
+    const categoryID = req?.params?.categoryID;
+
+    try {
+        const books = await PostBook.find({ category: categoryID, isArchived: false })
+            .skip(page * limit - limit)
+            .limit(limit);
+        const totalBooks = await PostBook.countDocuments({
+            category: categoryID,
+            isArchived: false
+        });
+        if (books.length > 0 && totalBooks > 0) {
+            return res.status(SUCCESS).json({
+                success: true,
+                message: label.postBook.viewBookMessage,
+                developerMessage: "",
+                result: books,
+                page,
+                total: totalBooks,
+            });
+        } else {
+            return res.status(SUCCESS).json({
+                success: true,
+                message: label.postBook.noBookInCategory,
+                developerMessage: "",
+                result: [],
+                page,
+                total: totalBooks,
+            });
+        }
+    } catch (error) {
+        console.error(error);
+        return res.status(INTERNAL_SERVER_ERROR).json({
+            success: false,
+            message: label.postBook.couldNotViewBooks,
+            developerMessage: error.message,
+            result: [],
+        });
+    }
+}

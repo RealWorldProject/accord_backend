@@ -4,12 +4,14 @@ import {
     GET_BOOK_STATUS_ROUTE,
     POST_BOOK_ROUTE,
     REJECT_BOOKS_ROUTE,
+    VIEW_CATEGORY_BOOKS_ROUTE,
 } from "../constants/book.constants";
 import {
     postBook,
     getStatusBook,
     acceptBook,
     rejectBook,
+    viewBooks,
 } from "../controllers/postBook.controllers";
 import {
     authenticateToken,
@@ -51,6 +53,12 @@ postBookRoutes.patch(
     isAdmin,
     validateRejectBookBody,
     rejectBook
+);
+
+postBookRoutes.get(
+    VIEW_CATEGORY_BOOKS_ROUTE,
+    authenticateToken,
+    viewBooks
 );
 
 export = postBookRoutes;

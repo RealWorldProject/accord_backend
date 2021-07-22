@@ -17,12 +17,12 @@ afterAll(async () => {
     await mongoose.connection.close();
 });
 
+const token =
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwZjk2ZGNlOGQxOTA1MjE2MDk5YjViMCIsImlhdCI6MTYyNjk2MzU4OX0.Rj81c0_HQsgpP-oX9aBOS6iuxJzyxE_8CUykN_WmNpU";
+
 describe("APIs /bookPost", () => {
     describe("when user tries to post a book", () => {
-        test("should respond with a 201 status code", async () => {
-            const token =
-                "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwZWYxMTFlZjEzN2JmNWJlNDE5NjVlYyIsImlhdCI6MTYyNjI4MDIyN30.mb2odO9zjyAVVIB8zY2myxaxxPt55edL02zvwZgtgUk";
-            const response = await request(app)
+        test("should respond with a 201 status code", async () => {const response = await request(app)
                 .post("/api/v1/book")
                 .set("authorization", "Bearer " + token)
                 .send({
@@ -38,6 +38,21 @@ describe("APIs /bookPost", () => {
                 });
             console.log(response);
             expect(response.statusCode).toBe(201);
+        });
+    });
+
+    describe("\nGET /book || When admin tries to verify book", () => {
+        test("should ")
+    })
+    
+
+    describe("\nGET /books/:categoryID || When user clicks on specific category in home_screen", () => {
+        test("should display the every books referenced to that category.", async () => {
+            
+            const response = await request(app)
+                .get("api/v1/books/60f930a3d1579a01fc3ca985")
+                .set("authorization", `Bearer ${token}`);
+            expect(response.statusCode).toBe(200);
         });
     });
 });
