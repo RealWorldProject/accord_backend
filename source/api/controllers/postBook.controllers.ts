@@ -68,7 +68,9 @@ export const getStatusBook = async (req: Request, res: Response) => {
             name: new RegExp(name, "i"),
             status,
         };
-        const books = await PostBook.find(query);
+        const books = await PostBook.find(query)
+            .populate("category", "category")
+            .populate("userId", "fullName email image");
         const totalBooks = await PostBook.countDocuments(query);
         if (totalBooks > 0 && books.length > 0) {
             return res.status(SUCCESS).json({
