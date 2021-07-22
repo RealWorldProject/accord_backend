@@ -38,7 +38,12 @@ export default {
         validation: (field: string) => `${field} is required.`,
         requireNumber: "Please enter the number value only.",
         chooseCategory: "Please the category of your book.",
+
+        viewBookMessage: "Showing available books in selected category.",
+        noBookInCategory: "There is no book available in this category at the moment.",
+        couldNotViewBooks: "Sorry, could not fetch books at the moment. Please Try Again."
     },
+
     category: {
         couldNotAddCategory:
             "Sorry, Category could not be added. Please Try Again.",
