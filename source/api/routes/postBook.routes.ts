@@ -4,7 +4,7 @@ import {
     GET_BOOK_STATUS_ROUTE,
     POST_BOOK_ROUTE,
     REJECT_BOOKS_ROUTE,
-    VIEW_CATEGORY_BOOKS_ROUTE,
+    VIEW_BOOKS_ROUTE,
 } from "../constants/book.constants";
 import {
     postBook,
@@ -55,10 +55,6 @@ postBookRoutes.patch(
     rejectBook
 );
 
-postBookRoutes.get(
-    VIEW_CATEGORY_BOOKS_ROUTE,
-    authenticateToken,
-    viewBooks
-);
+postBookRoutes.get(VIEW_BOOKS_ROUTE, authenticateToken, viewBooks);
 
 export = postBookRoutes;
