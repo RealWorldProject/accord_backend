@@ -22,10 +22,10 @@ export const postBookValidation = (data: any): ErrorType => {
             error.status = true;
             error.message = label.postBook.validation("Price");
         }
-        if (!isNumber(data?.price)) {
-            error.status = true;
-            error.message = label.postBook.requireNumber;
-        }
+        // if (!isNumber(data?.price)) {
+        //     error.status = true;
+        //     error.message = label.postBook.requireNumber;
+        // }
     } else {
         error.status = true;
         error.message = label.postBook.validation("Price");
