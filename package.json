@@ -4,9 +4,11 @@
     "description": "-   Typescript\r -   mongoose",
     "main": "index.js",
     "scripts": {
-        "build": "rm -rf build/ && prettier --write source/ && tsc",
+        "build:l": "rm -rf build/ && prettier --write source/ && tsc",
+        "build:w": "tsc",
         "dev": "cross-env NODE_ENV=development nodemon source/server.ts",
-        "start": "nodemon --exec \"ts-node\" --cache-directory .tscache ./source/server.ts",
+        "start": "cross-env NODE_ENV=development node build/server.js",
+        "postinstall": "npm run build:w",
         "test": "jest"
     },
     "keywords": [],
@@ -22,7 +24,6 @@
         "@types/morgan": "^1.9.2",
         "@types/node": "^15.12.4",
         "@types/supertest": "^2.0.11",
-        "cross-env": "^7.0.3",
         "jest": "^27.0.6",
         "morgan": "^1.10.0",
         "nodemon": "^2.0.7",
@@ -33,6 +34,7 @@
         "typescript": "^4.3.4"
     },
     "dependencies": {
+        "cross-env": "^7.0.3",
         "bcrypt": "^5.0.1",
         "cloudinary": "^1.26.2",
         "dotenv": "^10.0.0",

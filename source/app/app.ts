@@ -7,6 +7,7 @@ import path from "path";
 import categoryRoutes from "../api/routes/category.routes";
 import uploadRoutes from "../api/routes/upload.routes";
 import database from "../database/database";
+import statusRoutes from "../api/routes/status.routes";
 
 const VERSION = "/api/v1";
 
@@ -33,6 +34,7 @@ if (env === "development") {
 }
 
 // adding routes
+app.use(VERSION, statusRoutes);
 app.use(VERSION, userRoutes);
 app.use(VERSION, postBookRoutes);
 app.use(VERSION, categoryRoutes);
