@@ -6,14 +6,17 @@ import dotenv from "dotenv";
 import path from "path";
 import categoryRoutes from "../api/routes/category.routes";
 import uploadRoutes from "../api/routes/upload.routes";
-import database from "../database/database";
 import statusRoutes from "../api/routes/status.routes";
+import cors from "cors";
 
 const VERSION = "/api/v1";
 
 const app = express();
 
 const env = process.env.NODE_ENV;
+
+// cors
+app.use(cors());
 
 app.use(express.json({ limit: "50mb" }));
 app.use(express.urlencoded({ limit: "50mb", extended: false }));
