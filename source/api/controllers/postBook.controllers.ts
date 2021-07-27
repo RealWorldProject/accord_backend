@@ -1,8 +1,10 @@
 import { Request, Response, NextFunction } from "express";
 import {
+    BAD_REQUEST,
     CREATED,
     INTERNAL_SERVER_ERROR,
     SUCCESS,
+    UNAUTHORIZED,
 } from "../constants/status-codes.constants";
 import label from "../label/label";
 import PostBook from "../models/PostBook.model";
@@ -200,6 +202,111 @@ export const viewBooks = async (req: Request, res: Response) => {
             message: label.postBook.couldNotViewBooks,
             developerMessage: error.message,
             result: [],
+        });
+    }
+};
+
+export const updateBook = async (req: Request, res: Response) => {
+    const bookID = req.params.bookID;
+    try {
+        const {
+            name,
+            price,
+            images,
+            description,
+            author,
+            category,
+            isNew,
+            isAvailableForExchange,
+        } = req.body;
+        const postBook = await PostBook.findOne({
+            _id: bookID,
+            isArchived: false,
+        });
+        if (postBook) {
+            // checking if the user owns the book
+            if (postBook.userId.toString() === req.currentUser._id.toString()) {
+                postBook.name = name;
+                postBook.price = price;
+                postBook.description = description;
+                postBook.author = author;
+                postBook.category = category;
+                postBook.isNewBook = isNew;
+                postBook.isAvailableForExchange = isAvailableForExchange;
+                postBook.images = images;
+                const updatedPostBook = await postBook.save();
+                return res.status(SUCCESS).json({
+                    success: true,
+                    message: label.postBook.bookUpdated,
+                    developerMessage: "",
+                    result: updatedPostBook,
+                });
+            } else {
+                return res.status(UNAUTHORIZED).json({
+                    success: false,
+                    message: label.postBook.notAuthorized,
+                    developerMessage: "",
+                    result: postBook,
+                });
+            }
+        } else {
+            return res.status(BAD_REQUEST).json({
+                success: false,
+                message: label.postBook.bookNotFound,
+                developerMessage: "",
+                result: postBook,
+            });
+        }
+    } catch (error) {
+        res.status(INTERNAL_SERVER_ERROR).json({
+            success: false,
+            message: label.postBook.bookUpdateError,
+            developerMessage: error.message,
+            result: {},
+        });
+    }
+};
+
+export const deleteBook = async (req: Request, res: Response) => {
+    const bookID = req.params.bookID;
+    try {
+        const postBook = await PostBook.findOne({
+            _id: bookID,
+            isArchived: false,
+        });
+        if (postBook) {
+            // checking if the user owns the book
+            if (postBook.userId.toString() === req.currentUser._id.toString()) {
+                postBook.isArchived = true;
+                const updatedPostBook = await postBook.save();
+                return res.status(SUCCESS).json({
+                    success: true,
+                    message: label.postBook.bookDeleted,
+                    developerMessage: "",
+                    result: updatedPostBook,
+                });
+            } else {
+                return res.status(UNAUTHORIZED).json({
+                    success: false,
+                    message: label.postBook.notAuthorized,
+                    developerMessage: "",
+                    result: postBook,
+                });
+            }
+        } else {
+            return res.status(BAD_REQUEST).json({
+                success: false,
+                message: label.postBook.bookNotFound,
+                developerMessage: "",
+                result: postBook,
+            });
+        }
+    } catch (error) {
+        res.status(INTERNAL_SERVER_ERROR).json({
+            success: false,
+            message: label.postBook.bookDeleteError,
+            developerMessage: error.message,
+            result: {},
         });
     }
 };
