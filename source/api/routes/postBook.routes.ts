@@ -4,6 +4,7 @@ import {
     GET_BOOK_STATUS_ROUTE,
     POST_BOOK_ROUTE,
     REJECT_BOOKS_ROUTE,
+    UPDATE_DELETE_BOOK_ROUTE,
     VIEW_BOOKS_ROUTE,
 } from "../constants/book.constants";
 import {
@@ -12,6 +13,8 @@ import {
     acceptBook,
     rejectBook,
     viewBooks,
+    updateBook,
+    deleteBook,
 } from "../controllers/postBook.controllers";
 import {
     authenticateToken,
@@ -55,6 +58,14 @@ postBookRoutes.patch(
     rejectBook
 );
 
+postBookRoutes.put(
+    UPDATE_DELETE_BOOK_ROUTE,
+    authenticateToken,
+    validatePostBookBody,
+    updateBook
+);
+
+postBookRoutes.delete(UPDATE_DELETE_BOOK_ROUTE, authenticateToken, deleteBook);
 postBookRoutes.get(VIEW_BOOKS_ROUTE, authenticateToken, viewBooks);
 
 export = postBookRoutes;

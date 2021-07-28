@@ -47,6 +47,36 @@ describe("APIs /bookPost", () => {
         });
     });
 
+    describe("when user tries to edit a book", () => {
+        test("should respond with a 200 status code", async () => {
+            const response = await request(app)
+                .patch("/api/v1/book/")
+                .set("authorization", "Bearer " + token)
+                .send({
+                    name: "Small Data Test",
+                    price: 1200,
+                    images: [
+                        "https://upload.wikimedia.org/wikipedia/en/9/9c/Smalldatathetinycluesthatuncoverhugetrends.jpg",
+                    ],
+                    description: "The tiny clues that uncover huge trends",
+                    author: "Martin Lindstrom",
+                    category: "60f930a3d1579a01fc3ca985",
+                    isNew: true,
+                    isAvailableForExchange: true,
+                });
+            expect(response.statusCode).toBe(200);
+        });
+    });
+
+    describe("\nDELETE /book/ID || user tried to edit book", () => {
+        test("should return 200 response", async () => {
+            const response = await request(app)
+                .delete("/api/v1/book/60f93a66d1579a01fc3ca99e")
+                .set("authorization", `Bearer ${token}`);
+            expect(response.statusCode).toBe(200);
+        });
+    });
+
     describe("\nPATCH /book/accept || When admin tries to verify book", () => {
         test("should return 200 response", async () => {
             const response = await request(app)

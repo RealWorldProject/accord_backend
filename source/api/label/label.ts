@@ -26,6 +26,10 @@ export default {
         bookFetch: "Books Were Fetched.",
         bookFetchError:
             "Sorry, The books could not be Fetched. Please Try Again.",
+        bookUpdated: "Your book was updated",
+        bookUpdateError: "Sorry, Your book couldn't be updated.",
+        bookDeleted: "Your book was deleted",
+        bookDeleteError: "Sorry, Your book couldn't be deleted.",
         bookVerified: "The Book is verified.",
         bookVerificationError:
             "Sorry, The book couldn't be verified. Please Try Again",
@@ -33,12 +37,13 @@ export default {
         bookRejectionError:
             "Sorry, The book couldn't be rejected. Please Try Again",
         rejectionMessage: "Please provide a rejection message.",
+        notAuthorized: "Sorry, You are not authorized to perform this action.",
         couldNotPostBook: "Sorry, Book could not be posted. Please Try Again.",
         bookPosted: "Your book has been posted successfully.",
         validation: (field: string) => `${field} is required.`,
         requireNumber: "Please enter the number value only.",
         chooseCategory: "Please the category of your book.",
-
+        bookNotFound: "Sorry, the book is not found.",
         viewBookMessage: "Showing available books.",
         noBook: "There is no book available in at the moment.",
         couldNotViewBooks:
