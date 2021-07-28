@@ -6,6 +6,7 @@ import {
 } from "../constants/status-codes.constants";
 import label from "../label/label";
 import Category from "../models/Category.model";
+import { trimObject } from "../utilities/helperFunctions";
 
 // ************************ADD CATEGORY****************************
 export const addCategory = async (req: Request, res: Response) => {
@@ -42,13 +43,14 @@ export const viewCategory = async (req: Request, res: Response) => {
     const page: number = parseInt(req?.query.page as string) || 1;
     const limit: number = parseInt(req?.query.limit as string) || 0;
 
+    const categoryID = req?.query.categoryID as string;
+
     try {
-        const categoryList = await Category.find({ isArchived: false })
+        const query = trimObject({ isArchived: false, _id: categoryID });
+        const categoryList = await Category.find(query)
             .skip(page * limit - limit)
             .limit(limit);
-        const totalCategories = await Category.countDocuments({
-            isArchived: false,
-        });
+        const totalCategories = await Category.countDocuments(query);
 
         if (totalCategories > 0) {
             return res.status(SUCCESS).json({

@@ -163,6 +163,8 @@ export const viewBooks = async (req: Request, res: Response) => {
 
     const categoryID = req?.query?.categoryID as string;
     const searchTerm = req?.query?.searchTerm as string;
+    const bookID = req?.query.bookID as string;
+    const userID = req?.query.userID as string;
 
     try {
         // trim object remove all the empty field in the object
@@ -170,6 +172,8 @@ export const viewBooks = async (req: Request, res: Response) => {
             isArchived: false,
             status: "VERIFIED",
             category: categoryID,
+            _id: bookID,
+            userId: userID,
             name: new RegExp(searchTerm, "i"),
         });
         const books = await PostBook.find(query)
