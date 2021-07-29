@@ -24,7 +24,7 @@ export const postBook = async (
             description,
             author,
             category,
-            isNew,
+            isNewBook,
             isAvailableForExchange,
         } = req.body;
 
@@ -35,7 +35,7 @@ export const postBook = async (
             description,
             author,
             category,
-            isNewBook: isNew,
+            isNewBook,
             isAvailableForExchange,
             status: "PENDING",
             userId: req.currentUser._id,
