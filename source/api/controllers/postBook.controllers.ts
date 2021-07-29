@@ -220,7 +220,7 @@ export const updateBook = async (req: Request, res: Response) => {
             description,
             author,
             category,
-            isNew,
+            isNewBook,
             isAvailableForExchange,
         } = req.body;
         const postBook = await PostBook.findOne({
@@ -235,7 +235,7 @@ export const updateBook = async (req: Request, res: Response) => {
                 postBook.description = description;
                 postBook.author = author;
                 postBook.category = category;
-                postBook.isNewBook = isNew;
+                postBook.isNewBook = isNewBook;
                 postBook.isAvailableForExchange = isAvailableForExchange;
                 postBook.images = images;
                 const updatedPostBook = await postBook.save();
