@@ -63,6 +63,8 @@ export const addToCart = async (
             return res.status(BAD_REQUEST).json({
                 success: false,
                 message: label.cart.noBookFound(bookId),
+                developerMessage: " ",
+                result: [],
             });
         }
         if (isBookAdded) {
@@ -103,6 +105,68 @@ export const addToCart = async (
             success: false,
             message: label.cart.couldNotAddBooksToCart,
             systemMessage: error.message,
+            developerMessage: error.message,
+            result: [],
+        });
+    }
+};
+
+// ----------------------- View cart books -----------------------------
+export const viewCartBooks = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+) => {
+    const userID = req.currentUser._id;
+    try {
+        const cart = await Cart.findOne({
+            userID: userID,
+            isArchived: false,
+        }).populate("cartItems.book");
+
+        if (cart) {
+            if (cart.cartItems.length > 0) {
+                const trimmedCart = cart.cartItems.map((item) => {
+                    const book = item.book as PostBookDocument;
+                    return {
+                        _id: book.id,
+                        name: book.name,
+                        images: book.images[0],
+                        price: book.price,
+                        quantity: item.quantity,
+                        totalPrice: item.totalPrice,
+                    };
+                });
+                return res.status(SUCCESS).json({
+                    success: true,
+                    message: label.cart.viewCartBooks,
+                    developerMessage: " ",
+                    cartId: cart._id,
+                    result: trimmedCart,
+                });
+            } else {
+                return res.status(SUCCESS).json({
+                    success: true,
+                    message: label.cart.emptyCart,
+                    cartId: null,
+                    result: [],
+                });
+            }
+        } else {
+            return res.status(SUCCESS).json({
+                success: true,
+                message: label.cart.emptyCart,
+                cartId: null,
+                result: [],
+            });
+        }
+    } catch (error) {
+        res.status(INTERNAL_SERVER_ERROR).json({
+            success: false,
+            message: label.cart.couldNotViewCartBooks,
+            systemMessage: error.message,
+            developerMessage: error.message,
+            result: [],
         });
     }
 };
