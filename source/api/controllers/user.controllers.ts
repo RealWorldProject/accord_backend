@@ -75,12 +75,12 @@ export const loginUser = async (
     const { email, password } = req.body;
 
     try {
-        console.log(email);
+        // console.log(email);
         const userFound = await User.findOne({
             email: email,
             isArchived: false,
         });
-        console.log(userFound);
+        // console.log(userFound);
         if (userFound) {
             const plainPassword = password;
             const hashedPassword = userFound.password;
@@ -145,7 +145,7 @@ export const loginAdmin = async (
     try {
         const userFound = await User.findOne({
             email: email,
-            permissionLevel:ADMIN_PERMISSION_LEVEL,
+            permissionLevel: ADMIN_PERMISSION_LEVEL,
             isArchived: false,
         });
         if (userFound) {
@@ -202,3 +202,35 @@ export const loginAdmin = async (
     }
 };
 
+// ------------ view user profile ----------------------
+export const userProfile = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+) => {
+    const userID = req.currentUser._id;
+    try {
+        const userProfile = await User.findOne(
+            {
+                _id: userID,
+            },
+            { password: 0, permissionLevel: 0, isArchived: 0 }
+        );
+        // .select("-password");
+        console.log(userProfile);
+
+        return res.status(SUCCESS).json({
+            success: true,
+            message: label.auth.viewProfileSuccess,
+            developerMessage: "",
+            result: userProfile,
+        });
+    } catch (error) {
+        res.status(INTERNAL_SERVER_ERROR).json({
+            success: false,
+            message: label.auth.viewProfileError,
+            developerMessage: error.message,
+            result: [],
+        });
+    }
+};
