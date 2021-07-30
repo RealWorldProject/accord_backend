@@ -8,6 +8,7 @@ import categoryRoutes from "../api/routes/category.routes";
 import uploadRoutes from "../api/routes/upload.routes";
 import statusRoutes from "../api/routes/status.routes";
 import cors from "cors";
+import cartRoutes from "../api/routes/cart.routes";
 
 const VERSION = "/api/v1";
 
@@ -42,6 +43,7 @@ app.use(VERSION, userRoutes);
 app.use(VERSION, postBookRoutes);
 app.use(VERSION, categoryRoutes);
 app.use(VERSION, uploadRoutes);
+app.use(VERSION, cartRoutes);
 
 // const mongoURI =
 //     process.env.MONGO_URI ||

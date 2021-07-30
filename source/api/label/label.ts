@@ -76,4 +76,13 @@ export default {
         couldNotDeleteCategory:
             "Sorry, Category could not be deleted. Please Try Again.",
     },
+
+    cart: {
+        couldNotAddBooksToCart: "Sorry, The book has not been added to cart. Please Try Again.",
+        booksAddedToCart: "This book has been added to cart.",
+        noBookFound: (field: string) => `${field} is not found.`,
+        couldNotViewCartBooks: "Sorry, Books cart cannot view. Please Try Again",
+        viewCartBooks: "Books in the cart were displayed",
+        emptyCart: "Your cart is empty"
+    }
 };
