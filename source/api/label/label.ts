@@ -20,6 +20,8 @@ export default {
         accessNotGranted: "Access not granted to perform the operation.",
         validation: (field: string) => `${field} is required.`,
         invalidEmail: "Provided Email is Invalid.",
+        viewProfileError: "Could not view profile, Please Try Again.",
+        viewProfileSuccess: "User profile has been displayed"
     },
 
     postBook: {
