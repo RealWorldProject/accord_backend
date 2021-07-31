@@ -28,7 +28,7 @@ export const registerUser = async (
                 success: false,
                 message: label.auth.userAlreadyExists,
                 developerMessage: "",
-                result: [],
+                result: {},
             });
         } else {
             const { error, hash } = await encryptPassword(password);
@@ -37,7 +37,7 @@ export const registerUser = async (
                     success: false,
                     message: label.auth.couldNotRegisterUser,
                     developerMessage: "",
-                    result: [],
+                    result: {},
                 });
             } else {
                 const userObj = new User({
@@ -51,7 +51,7 @@ export const registerUser = async (
                     success: true,
                     message: label.auth.userRegistered,
                     developerMessage: "",
-                    result: [],
+                    result: {},
                 });
             }
         }
@@ -61,7 +61,7 @@ export const registerUser = async (
             success: false,
             message: label.auth.couldNotRegisterUser,
             developerMessage: error.message,
-            result: [],
+            result: {},
         });
     }
 };
@@ -96,7 +96,7 @@ export const loginUser = async (
                         success: true,
                         message: label.auth.loginSuccessful,
                         developerMessage: "",
-                        result: [],
+                        result: {},
                         token: token,
                         permissionLevel: userFound.permissionLevel,
                     });
@@ -105,7 +105,7 @@ export const loginUser = async (
                         success: false,
                         message: label.auth.noTokenFound,
                         developerMessage: "",
-                        result: [],
+                        result: {},
                     });
                 }
             } else {
@@ -113,7 +113,7 @@ export const loginUser = async (
                     success: false,
                     message: label.auth.emailPasswordError,
                     developerMessage: "",
-                    result: [],
+                    result: {},
                 });
             }
         } else {
@@ -122,7 +122,7 @@ export const loginUser = async (
                 success: false,
                 message: label.auth.noUserFound,
                 developerMessage: "",
-                result: [],
+                result: {},
             });
         }
     } catch (error) {
@@ -130,7 +130,7 @@ export const loginUser = async (
             success: false,
             message: label.auth.loginError,
             developerMessage: error.message,
-            result: [],
+            result: {},
         });
     }
 };
@@ -163,7 +163,7 @@ export const loginAdmin = async (
                         success: true,
                         message: label.auth.loginSuccessful,
                         developerMessage: "",
-                        result: [],
+                        result: {},
                         token: token,
                         permissionLevel: userFound.permissionLevel,
                     });
@@ -172,7 +172,7 @@ export const loginAdmin = async (
                         success: false,
                         message: label.auth.noTokenFound,
                         developerMessage: "",
-                        result: [],
+                        result: {},
                     });
                 }
             } else {
@@ -180,7 +180,7 @@ export const loginAdmin = async (
                     success: false,
                     message: label.auth.emailPasswordError,
                     developerMessage: "",
-                    result: [],
+                    result: {},
                 });
             }
         } else {
@@ -189,7 +189,7 @@ export const loginAdmin = async (
                 success: false,
                 message: label.auth.notAdmin,
                 developerMessage: "",
-                result: [],
+                result: {},
             });
         }
     } catch (error) {
@@ -197,7 +197,7 @@ export const loginAdmin = async (
             success: false,
             message: label.auth.loginError,
             developerMessage: error.message,
-            result: [],
+            result: {},
         });
     }
 };
@@ -230,7 +230,7 @@ export const userProfile = async (
             success: false,
             message: label.auth.viewProfileError,
             developerMessage: error.message,
-            result: [],
+            result: {},
         });
     }
 };
