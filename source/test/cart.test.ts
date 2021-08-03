@@ -45,8 +45,22 @@ describe("APIs /viewCart", () => {
         test("should respond with a 200 status code", async () => {
             const response = await request(app)
                 .get("/api/v1/cart")
+                .set("authorization", "Bearer " + token);
+
+            expect(response.statusCode).toBe(200);
+        });
+    });
+});
+
+describe("APIs /deleteCartBook", () => {
+    describe("when user tries to remove cart book", () => {
+        test("should respond with a 200 status code", async () => {
+            const response = await request(app)
+                .delete("/api/v1/cart")
                 .set("authorization", "Bearer " + token)
-                
+                .send({
+                    bookID: "60f97a5e6b4ada4cf488c74c",
+                });
             expect(response.statusCode).toBe(200);
         });
     });

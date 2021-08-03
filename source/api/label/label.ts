@@ -21,7 +21,7 @@ export default {
         validation: (field: string) => `${field} is required.`,
         invalidEmail: "Provided Email is Invalid.",
         viewProfileError: "Could not view profile, Please Try Again.",
-        viewProfileSuccess: "User profile has been displayed"
+        viewProfileSuccess: "User profile has been displayed",
     },
 
     postBook: {
@@ -80,11 +80,17 @@ export default {
     },
 
     cart: {
-        couldNotAddBooksToCart: "Sorry, The book has not been added to cart. Please Try Again.",
+        couldNotAddBooksToCart:
+            "Sorry, The book has not been added to cart. Please Try Again.",
         booksAddedToCart: "This book has been added to cart.",
         noBookFound: (field: string) => `${field} is not found.`,
-        couldNotViewCartBooks: "Sorry, Books cart cannot view. Please Try Again",
+        couldNotViewCartBooks:
+            "Sorry, Books cart cannot view. Please Try Again",
         viewCartBooks: "Books in the cart were displayed",
-        emptyCart: "Your cart is empty"
-    }
+        emptyCart: "Your cart is empty",
+        removeCartBookSuccess: "Book in the cart was removed.",
+        removeCartBookError: "Sorry, Book was not removed.",
+        cartNotFound: "Cart not found",
+        bookNotFound: "Book Not Found"
+    },
 };

@@ -89,6 +89,7 @@ export const addToCart = async (
                     success: true,
                     message: label.cart.booksAddedToCart,
                     developerMessage: " ",
+                    cartID: newCart._id,
                     result: trimmedCart,
                 });
             }
@@ -164,6 +165,106 @@ export const viewCartBooks = async (
         res.status(INTERNAL_SERVER_ERROR).json({
             success: false,
             message: label.cart.couldNotViewCartBooks,
+            systemMessage: error.message,
+            developerMessage: error.message,
+            result: [],
+        });
+    }
+};
+
+// ----------------------- Remove cart books -----------------------------
+export const deleteCartBooks = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+) => {
+    const userID = req.currentUser._id;
+    const bookId = req.body.bookID;
+
+    try {
+        const bookFound = await PostBook.findOne({
+            _id: bookId,
+            isArchived: false,
+        });
+
+        console.log(bookFound)
+
+        if (bookFound) {
+            const cartFound = await Cart.findOne({
+                userID: userID,
+                isArchived: false,
+            });
+            if (cartFound) {
+                let cartProductIndex = -1;
+                cartProductIndex = cartFound.cartItems.findIndex(
+                    (item) => bookId == item.book
+                );
+
+                if (cartProductIndex >= 0) {
+                    const cartItems = [...cartFound.cartItems];
+                    const newCartItems = cartItems.filter(
+                        (item) => bookId != item.book
+                    );
+                    cartFound.cartItems = newCartItems;
+                    const updatedCart = await cartFound.save();
+                    const cart = await Cart.findOne({
+                        userID: userID,
+                        isArchived: false,
+                    });
+                    const trimmedCart = cart?.cartItems.map((item) => {
+                        const book = item.book as PostBookDocument;
+                        return {
+                            _id: book.id,
+                            name: book.name,
+                            images: book.images[0],
+                            price: book.price,
+                            quantity: item.quantity,
+                            totalPrice: item.totalPrice,
+                        };
+                    });
+                    if (updatedCart) {
+                        res.status(SUCCESS).json({
+                            success: true,
+                            message: label.cart.removeCartBookSuccess,
+                            developerMessage: " ",
+                            result: trimmedCart,
+                        });
+                    } else {
+                        res.status(BAD_REQUEST).json({
+                            success: false,
+                            message: label.cart.removeCartBookError,
+                            developerMessage: " ",
+                            result: [],
+                        });
+                    }
+                } else {
+                    return res.status(SUCCESS).json({
+                        success: true,
+                        message: label.cart.emptyCart,
+                        cartId: null,
+                        result: [],
+                    });
+                }
+            } else {
+                res.status(BAD_REQUEST).json({
+                    success: false,
+                    message: label.cart.cartNotFound,
+                    developerMessage: " ",
+                    result: [],
+                });
+            }
+        } else {
+            res.status(BAD_REQUEST).json({
+                success: false,
+                message: label.cart.bookNotFound,
+                developerMessage: " ",
+                result: [],
+            });
+        }
+    } catch (error) {
+        res.status(INTERNAL_SERVER_ERROR).json({
+            success: false,
+            message: label.cart.removeCartBookError,
             systemMessage: error.message,
             developerMessage: error.message,
             result: [],
