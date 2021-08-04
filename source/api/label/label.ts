@@ -22,6 +22,16 @@ export default {
         invalidEmail: "Provided Email is Invalid.",
         viewProfileError: "Could not view profile, Please Try Again.",
         viewProfileSuccess: "User profile has been displayed",
+        couldNotViewUsers:
+            "Sorry, Users could not view at the moment. Please Try Again.",
+        userViewed: "All the users has been displayed",
+        noUser:
+        "No users has been available at the moment. Please contact Admin for new Users.",
+        suspensionMessage: "Please provide a suspension message.",
+        userSuspensionError:
+            "Sorry, User has not been suspended. Please Try Again",
+        userSuspendedSuccess: "User has been suspended.",
+        alreadySuspendedUser: "This user has already suspended.",
     },
 
     postBook: {
@@ -91,6 +101,6 @@ export default {
         removeCartBookSuccess: "Book in the cart was removed.",
         removeCartBookError: "Sorry, Book was not removed.",
         cartNotFound: "Cart not found",
-        bookNotFound: "Book Not Found"
+        bookNotFound: "Book Not Found",
     },
 };

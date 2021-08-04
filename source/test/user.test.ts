@@ -42,15 +42,35 @@ describe("POST /user", () => {
     });
 
     const token =
-        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwZmVkNzE5YThlNjE1MDAxYzkzNTU3YSIsImlhdCI6MTYyNzY1ODExN30.2Atq4eBDcomZ6myM1z_2aO1tpT9ofCElaV_cDp15nq8";
-
+        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwZjkxMzEwZDE1NzlhMDFmYzNjYTk3YiIsImlhdCI6MTYyODA5NDIwNX0.j6Q0NOkc3EVxlVFWmU79LBcWvO_AnK5la4dkOgFBYW0";
     describe("when users try to view profile", () => {
         test("should respond with a 200 status code", async () => {
             const response = await request(app)
                 .get("/api/v1/user/profile/60fed719a8e615001c93557a")
                 .set("authorization", "Bearer " + token);
-            console.log(response.body);
 
+            expect(response.statusCode).toBe(200);
+        });
+    });
+
+    describe("\n GET /users || When admin tries to view users", () => {
+        test("should respond with a 200 status code", async () => {
+            const response = await request(app)
+                .get("/api/v1/users")
+                .set("authorization", "Bearer " + token);
+
+            expect(response.statusCode).toBe(200);
+        });
+    });
+
+    describe("\nPATCH /user/suspend || When admin tries to suspend user", () => {
+        test("should return 200 response", async () => {
+            const response = await request(app)
+                .patch("/api/v1/user/suspend/610aabb5b490b03fe06081e2")
+                .set("authorization", "Bearer " + token)
+                .send({
+                    suspensionMessage: "This is for Testing",
+                });
             expect(response.statusCode).toBe(200);
         });
     });

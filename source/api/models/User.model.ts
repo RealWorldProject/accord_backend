@@ -8,6 +8,8 @@ export interface UserData {
     image: string;
     permissionLevel: number;
     phoneNumber: string;
+    isSuspended: boolean;
+    suspensionMessage: string;
 }
 
 export interface UserDocument extends UserData, mongoose.Document {
@@ -38,7 +40,7 @@ export const userSchema = new mongoose.Schema(
         permissionLevel: {
             type: Number,
             required: true,
-            default: USER_PERMISSION_LEVEL
+            default: USER_PERMISSION_LEVEL,
         },
         password: {
             type: String,
@@ -48,6 +50,15 @@ export const userSchema = new mongoose.Schema(
             type: Boolean,
             required: true,
             default: false,
+        },
+        isSuspended: {
+            type: Boolean,
+            required: false,
+            default: false,
+        },
+        suspensionMessage: {
+            type: String,
+            required: false,
         },
     },
     {

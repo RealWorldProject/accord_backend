@@ -5,7 +5,7 @@ import label from "../label/label";
 import User from "../models/User.model";
 import { ErrorType } from "../types/interfaces";
 import { encryptPassword } from "../utilities/auth.utilities";
-import { userValidation } from "../validations/user.validations";
+import { suspendUserValidation, userValidation } from "../validations/user.validations";
 
 export const validateRegisterBody = (
     req: Request,
@@ -89,5 +89,24 @@ export const createSuperUser = async (
             message: label.auth.error,
             developerMessage: err.message,
         });
+    }
+};
+
+export const validateSuspendUserBody = (
+    req: Request,
+    res: Response,
+    next: NextFunction
+) => {
+    const { status, message }: ErrorType = suspendUserValidation(req.body);
+
+    if (status) {
+        res.status(BAD_REQUEST).json({
+            success: false,
+            message: message,
+            developerMessage: message,
+            result: [],
+        });
+    } else {
+        next();
     }
 };
