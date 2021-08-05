@@ -187,7 +187,6 @@ export const deleteCartBooks = async (
             isArchived: false,
         });
 
-        console.log(bookFound)
 
         if (bookFound) {
             const cartFound = await Cart.findOne({
@@ -210,7 +209,7 @@ export const deleteCartBooks = async (
                     const cart = await Cart.findOne({
                         userID: userID,
                         isArchived: false,
-                    });
+                    }).populate("cartItems.book")
                     const trimmedCart = cart?.cartItems.map((item) => {
                         const book = item.book as PostBookDocument;
                         return {
@@ -262,10 +261,10 @@ export const deleteCartBooks = async (
             });
         }
     } catch (error) {
+        console.log(error)
         res.status(INTERNAL_SERVER_ERROR).json({
             success: false,
             message: label.cart.removeCartBookError,
-            systemMessage: error.message,
             developerMessage: error.message,
             result: [],
         });
