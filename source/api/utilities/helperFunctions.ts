@@ -19,3 +19,10 @@ export const trimObject = (obj: any) => {
     }
     return obj;
 };
+
+export function getRandomOrderNumber(
+    min: number = 100000,
+    max: number = 10000000
+): number {
+    return Math.floor(Math.random() * (max - min)) + min;
+}

@@ -21,7 +21,8 @@ afterAll(async () => {
 });
 
 // USER TOKEN
-const userToken = "";
+const userToken =
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwZjk2ZGNlOGQxOTA1MjE2MDk5YjViMCIsImlhdCI6MTYyODE4MjU1OX0.8d9t9k6jrop0D608XpZIT1M1rOU_WiiYfdJcnKwFtG8";
 
 // ADMIN TOKEN
 const adminToken = "";
@@ -36,14 +37,14 @@ describe("APIs /orders", () => {
                 .post(baseUrl + `/order`)
                 .set("authorization", `Bearer ${userToken}`)
                 .send({
-                    fullName: "",
-                    phoneNumber: "",
-                    region: "",
-                    city: "",
-                    area: "",
-                    address: "",
-                    coordinates: "",
-                    paymentGateway: "",
+                    fullName: "Test",
+                    phoneNumber: "9860180332",
+                    state: "Bagmati",
+                    city: "Banepa",
+                    area: "Tindobato",
+                    address: "nepal",
+                    coordinates: "jjsjsjs,kakakka",
+                    paymentGateway: "COD",
                 });
             expect(response.statusCode).toBe(201);
         });

@@ -2,17 +2,29 @@ import mongoose from "mongoose";
 import { PostBookDocument } from "./PostBook.model";
 import { UserDocument } from "./User.model";
 
+// to retrieve each
+type cartBooks = {
+    bookName: string;
+    bookPrice: number;
+    bookAuthor: string;
+    bookImage: string;
+    quantity: number;
+    totalPrice: number;
+};
+
 export interface OrderData {
-    userId: string | UserDocument;
-    book: string | PostBookDocument;
+    userID: string | UserDocument;
+    orderItems: cartBooks[];
+    orderID: string;
     fullName: string;
     phoneNumber: string;
-    region: string;
+    state: string;
     city: string;
     area: string;
     address: string;
     coordinates: string;
     paymentGateway: string;
+    orderTotalPrice: number;
 }
 
 export interface OrderDocument extends OrderData, mongoose.Document {
@@ -23,16 +35,43 @@ export interface OrderDocument extends OrderData, mongoose.Document {
 
 export const orderSchema = new mongoose.Schema(
     {
-        userId: {
+        userID: {
             type: mongoose.Schema.Types.ObjectId,
             required: true,
             ref: "user",
         },
-        book: {
-            type: mongoose.Schema.Types.ObjectId,
+        orderID: {
+            type: String,
             required: true,
-            ref: "postBook"
         },
+        orderItems: [
+            {
+                bookName: {
+                    type: String,
+                    required: false,
+                },
+                bookPrice: {
+                    type: Number,
+                    required: false,
+                },
+                bookAuthor: {
+                    type: String,
+                    required: false,
+                },
+                bookImage: {
+                    type: String,
+                    required: false,
+                },
+                quantity: {
+                    type: Number,
+                    required: false,
+                    default: 1,
+                },
+                totalPrice: {
+                    type: Number,
+                },
+            },
+        ],
         fullName: {
             type: String,
             required: true,
@@ -41,7 +80,7 @@ export const orderSchema = new mongoose.Schema(
             type: String,
             required: true,
         },
-        region: {
+        state: {
             type: String,
             required: true,
         },
@@ -63,6 +102,12 @@ export const orderSchema = new mongoose.Schema(
         },
         paymentGateway: {
             type: String,
+            required: true,
+            enum: ["COD"],
+            default: "COD",
+        },
+        orderTotalPrice: {
+            type: Number,
             required: true,
         },
     },
