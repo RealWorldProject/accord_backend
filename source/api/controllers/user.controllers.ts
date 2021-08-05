@@ -1,5 +1,5 @@
-import { Request, Response, NextFunction } from "express";
-import { ADMIN_PERMISSION_LEVEL } from "../constants/global.constant";
+import e, { Request, Response, NextFunction } from "express";
+import { ADMIN_PERMISSION_LEVEL, USER_PERMISSION_LEVEL } from "../constants/global.constant";
 import {
     SUCCESS,
     BAD_REQUEST,
@@ -7,12 +7,13 @@ import {
     CREATED,
 } from "../constants/status-codes.constants";
 import label from "../label/label";
-import User from "../models/User.model";
+import User, { UserDocument } from "../models/User.model";
 import {
     decryptPassword,
     encryptPassword,
     generateToken,
 } from "../utilities/auth.utilities";
+import { trimObject } from "../utilities/helperFunctions";
 
 export const registerUser = async (
     req: Request,
@@ -217,8 +218,6 @@ export const userProfile = async (
             { password: 0, permissionLevel: 0, isArchived: 0 }
         );
         // .select("-password");
-        console.log(userProfile);
-
         return res.status(SUCCESS).json({
             success: true,
             message: label.auth.viewProfileSuccess,
@@ -229,6 +228,107 @@ export const userProfile = async (
         res.status(INTERNAL_SERVER_ERROR).json({
             success: false,
             message: label.auth.viewProfileError,
+            developerMessage: error.message,
+            result: {},
+        });
+    }
+};
+
+// ---------------- View user -----------------------
+export const viewUsers = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+) => {
+    const page: number = parseInt(req?.query.page as string) || 1;
+    const limit: number = parseInt(req?.query.limit as string) || 0;
+
+    const userID = req.query.userID as string;
+
+    try {
+        const user = trimObject({
+            isArchived: false,
+            _id: userID,
+            permissionLevel: USER_PERMISSION_LEVEL
+        });
+        const userList = await User.find(user)
+            .skip(page * limit - limit)
+            .limit(limit);
+        const totalUsers = await User.countDocuments(user);
+
+        if (totalUsers > 0 ) {
+            return res.status(SUCCESS).json({
+                success: true,
+                message: label.auth.userViewed,
+                developerMessage: "",
+                result: userList,
+                page,
+                total: totalUsers,
+            });
+        } else{
+            return res.status(SUCCESS).json({
+                success: true,
+                message: label.auth.noUser,
+                developerMessage: "",
+                result: [],
+                page,
+                total: totalUsers,
+            })
+        }
+
+    } catch (error) {
+        return res.status(INTERNAL_SERVER_ERROR).json({
+            success: false,
+            message: label.auth.couldNotViewUsers,
+            developerMessage: error.message,
+            result: [],
+        });
+    }
+};
+
+// ------------ Suspend user ----------------------
+export const suspendUser = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+) => {
+    const userID = req.params.userID;
+    try {
+        const { suspensionMessage } = req.body;
+        const user = await User.findOne({
+            isArchived: false,
+            _id: userID,
+        });
+        if (user) {
+            if (user.isSuspended === true) {
+                // user is already suspended
+                return res.status(SUCCESS).json({
+                    success: true,
+                    message: label.auth.alreadySuspendedUser,
+                    developerMessage: "",
+                    result: [],
+                });
+            }
+            user.isSuspended = true;
+            user.suspensionMessage = suspensionMessage;
+            const updatedUser = await user.save();
+            const userReturn = {
+                _id: updatedUser._id,
+                email: updatedUser.email,
+            };
+            return res.status(SUCCESS).json({
+                success: true,
+                message: label.auth.userSuspendedSuccess,
+                developerMessage: "",
+                result: userReturn,
+            });
+        } else {
+            throw new Error(label.auth.userSuspensionError);
+        }
+    } catch (error) {
+        res.status(INTERNAL_SERVER_ERROR).json({
+            success: false,
+            message: label.auth.userSuspensionError,
             developerMessage: error.message,
             result: {},
         });

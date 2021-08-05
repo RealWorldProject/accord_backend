@@ -32,3 +32,21 @@ export const userValidation = (data: any): ErrorType => {
     }
     return error;
 };
+
+export const suspendUserValidation = (data: any): ErrorType => {
+    let error: ErrorType = {
+        status: false,
+        message: "",
+    };
+
+    if (data.hasOwnProperty("suspensionMessage")) {
+        if (isEmpty(data?.suspensionMessage)) {
+            error.status = true;
+            error.message = label.auth.suspensionMessage;
+        }
+    } else {
+        error.status = true;
+        error.message = label.auth.suspensionMessage;
+    }
+    return error;
+};
