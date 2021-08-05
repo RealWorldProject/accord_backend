@@ -103,4 +103,12 @@ export default {
         cartNotFound: "Cart not found",
         bookNotFound: "Book Not Found",
     },
+
+    order: {
+        validation: (field: string) => `${field} is required.`,
+        invalidPhoneNumber: "Please provide a phone number",
+        selectPaymentGateway: "Please select the payment method for your book",
+        orderSuccess: "Your order has been done.",
+        orderError: "Your order has not been done, Please Try Again",
+    }
 };
