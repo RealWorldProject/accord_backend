@@ -25,7 +25,7 @@ const userToken =
     "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwZjk2ZGNlOGQxOTA1MjE2MDk5YjViMCIsImlhdCI6MTYyODE4MjU1OX0.8d9t9k6jrop0D608XpZIT1M1rOU_WiiYfdJcnKwFtG8";
 
 // ADMIN TOKEN
-const adminToken = "";
+const adminToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwZjkxMzEwZDE1NzlhMDFmYzNjYTk3YiIsImlhdCI6MTYyODI1MTQxNX0.EFg88caZoeDM7h6WdSqli0XAHKGHkf0AyEBbbhmODhE";
 
 // BASE URL
 const baseUrl = "/api/v1/";
@@ -53,7 +53,7 @@ describe("APIs /orders", () => {
     describe("\n POST /order || when admin tries to view an orders", () => {
         test("should respond with a 200 status code", async () => {
             const response = await request(app)
-                .get(baseUrl + `/order`)
+                .get(baseUrl + `/orders`)
                 .set("authorization", `Bearer ${adminToken}`)
                 .expect("Content-Type", /json/);
             expect(response.statusCode).toBe(200);

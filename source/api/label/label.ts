@@ -25,8 +25,7 @@ export default {
         couldNotViewUsers:
             "Sorry, Users could not view at the moment. Please Try Again.",
         userViewed: "All the users has been displayed",
-        noUser:
-        "No users has been available at the moment. Please contact Admin for new Users.",
+        noUser: "No users has been available at the moment. Please contact Admin for new Users.",
         suspensionMessage: "Please provide a suspension message.",
         userSuspensionError:
             "Sorry, User has not been suspended. Please Try Again",
@@ -110,5 +109,9 @@ export default {
         selectPaymentGateway: "Please select the payment method for your book",
         orderSuccess: "Your order has been done.",
         orderError: "Your order has not been done, Please Try Again",
-    }
+        orderViewed: "All the users order has been displayed.",
+        orderNotViewed:
+            "Order has not been displayed at the moment, Please Try Again.",
+        noOrder: "No any order has been placed.",
+    },
 };

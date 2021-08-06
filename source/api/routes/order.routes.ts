@@ -18,6 +18,6 @@ orderRoutes.post(
 );
 
 // ADMIN ROUTE
-orderRoutes.post(VIEW_ORDER, authenticateToken, isAdmin, viewOrder);
+orderRoutes.get(VIEW_ORDER, authenticateToken, isAdmin, viewOrder);
 
 export = orderRoutes;
