@@ -3,12 +3,13 @@ import {
     BAD_REQUEST,
     CREATED,
     INTERNAL_SERVER_ERROR,
+    SUCCESS,
 } from "../constants/status-codes.constants";
 import label from "../label/label";
 import Cart from "../models/Cart.model";
 import Order from "../models/Order.model";
 import { PostBookDocument } from "../models/PostBook.model";
-import { getRandomOrderNumber } from "../utilities/helperFunctions";
+import { getRandomOrderNumber, trimObject } from "../utilities/helperFunctions";
 
 // -------------- View an order -----------------
 export const viewOrder = async (
@@ -16,12 +17,44 @@ export const viewOrder = async (
     res: Response,
     next: NextFunction
 ) => {
+    const page: number = parseInt(req?.query.page as string) || 1;
+    const limit: number = parseInt(req?.query.limit as string) || 0;
+
+    const orderID = req.query.orderID as string;
+
     try {
+        
+        const orderList = await Order.find({})
+            .populate("userID", "fullName email image")
+            .skip(page * limit - limit)
+            .limit(limit);
+
+        const totalOrders = await Order.countDocuments({});
+
+        if (totalOrders > 0) {
+            return res.status(SUCCESS).json({
+                success: true,
+                message: label.order.orderViewed,
+                developerMessage: "",
+                result: orderList,
+                page,
+                total: totalOrders,
+            });
+        } else {
+            return res.status(SUCCESS).json({
+                success: true,
+                message: label.order.noOrder,
+                developerMessage: "",
+                result: [],
+                page,
+                total: totalOrders,
+            });
+        }
     } catch (error) {
         console.log(error);
         res.status(INTERNAL_SERVER_ERROR).json({
             success: false,
-            message: label.order.orderError,
+            message: label.order.orderNotViewed,
             developerMessage: error.message,
             result: {},
         });
