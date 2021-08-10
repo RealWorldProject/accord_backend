@@ -114,4 +114,12 @@ export default {
             "Order has not been displayed at the moment, Please Try Again.",
         noOrder: "No any order has been placed.",
     },
+
+    request: {
+        requestAdded: "Your request has been added.",
+        requestError: "Your request has not been added. Please Try Again.",
+        noBookFound: "Book Not Found.",
+        notAuthorize: "Not authorize to exchange a book.",
+        validation: (field: string) => `${field} is required.`,
+    },
 };
