@@ -22,10 +22,10 @@ afterAll(async () => {
 
 // USER TOKEN
 const userToken =
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwZjk2ZGNlOGQxOTA1MjE2MDk5YjViMCIsImlhdCI6MTYyODE4MjU1OX0.8d9t9k6jrop0D608XpZIT1M1rOU_WiiYfdJcnKwFtG8";
-
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwZjk2ZGNlOGQxOTA1MjE2MDk5YjViMCIsImlhdCI6MTYyODY3OTE0NX0.mG2Wr1Zgb_pn5nxzusVxZRZbOPfl1iESy8p3l-xQq6Y";
 // ADMIN TOKEN
-const adminToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwZjkxMzEwZDE1NzlhMDFmYzNjYTk3YiIsImlhdCI6MTYyODI1MTQxNX0.EFg88caZoeDM7h6WdSqli0XAHKGHkf0AyEBbbhmODhE";
+const adminToken =
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwZjkxMzEwZDE1NzlhMDFmYzNjYTk3YiIsImlhdCI6MTYyODI1MTQxNX0.EFg88caZoeDM7h6WdSqli0XAHKGHkf0AyEBbbhmODhE";
 
 // BASE URL
 const baseUrl = "/api/v1/";
@@ -55,6 +55,16 @@ describe("APIs /orders", () => {
             const response = await request(app)
                 .get(baseUrl + `/orders`)
                 .set("authorization", `Bearer ${adminToken}`)
+                .expect("Content-Type", /json/);
+            expect(response.statusCode).toBe(200);
+        });
+    });
+
+    describe("\n GET /orders || when user tries to view an orders", () => {
+        test("should respond with a 200 status code", async () => {
+            const response = await request(app)
+                .get(baseUrl + `/orders`)
+                .set("authorization", `Bearer ${userToken}`)
                 .expect("Content-Type", /json/);
             expect(response.statusCode).toBe(200);
         });

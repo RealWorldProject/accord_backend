@@ -32,7 +32,8 @@ export default {
         userSuspendedSuccess: "User has been suspended.",
         alreadySuspendedUser: "This user has already suspended.",
         profileUpdated: "Your profile has been updated successfully.",
-        profileNotUpdated: "Your profile has not been updated. Please Try Again."
+        profileNotUpdated:
+            "Your profile has not been updated. Please Try Again.",
     },
 
     postBook: {
@@ -111,9 +112,10 @@ export default {
         selectPaymentGateway: "Please select the payment method for your book",
         orderSuccess: "Your order has been done.",
         orderError: "Your order has not been done, Please Try Again",
-        orderViewed: "All the users order has been displayed.",
+        orderViewed: "All the order has been displayed.",
         orderNotViewed:
             "Order has not been displayed at the moment, Please Try Again.",
+        emptyOrder: "Empty order list",
         noOrder: "No any order has been placed.",
     },
 

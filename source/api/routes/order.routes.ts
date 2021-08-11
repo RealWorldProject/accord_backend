@@ -1,6 +1,14 @@
 import express from "express";
-import { MAKE_ORDER, VIEW_ORDER } from "../constants/order.constants";
-import { checkoutOrder, viewOrder } from "../controllers/order.controllers";
+import {
+    MAKE_ORDER,
+    VIEW_MY_ORDER,
+    VIEW_ORDER,
+} from "../constants/order.constants";
+import {
+    checkoutOrder,
+    viewMyOrder,
+    viewOrder,
+} from "../controllers/order.controllers";
 import {
     authenticateToken,
     isAdmin,
@@ -16,6 +24,8 @@ orderRoutes.post(
     validateOrderBody,
     checkoutOrder
 );
+
+orderRoutes.get(VIEW_MY_ORDER, authenticateToken, viewMyOrder);
 
 // ADMIN ROUTE
 orderRoutes.get(VIEW_ORDER, authenticateToken, isAdmin, viewOrder);
