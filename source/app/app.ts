@@ -10,6 +10,7 @@ import statusRoutes from "../api/routes/status.routes";
 import cors from "cors";
 import cartRoutes from "../api/routes/cart.routes";
 import orderRoutes from "../api/routes/order.routes";
+import requestRoutes from "../api/routes/request.routes";
 
 const VERSION = "/api/v1";
 
@@ -46,6 +47,7 @@ app.use(VERSION, categoryRoutes);
 app.use(VERSION, uploadRoutes);
 app.use(VERSION, cartRoutes);
 app.use(VERSION, orderRoutes);
+app.use(VERSION, requestRoutes);
 
 // const mongoURI =
 //     process.env.MONGO_URI ||
