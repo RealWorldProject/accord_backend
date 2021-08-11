@@ -11,7 +11,7 @@ import Order from "../models/Order.model";
 import { PostBookDocument } from "../models/PostBook.model";
 import { getRandomOrderNumber, trimObject } from "../utilities/helperFunctions";
 
-// -------------- View an order -----------------
+// -------------- View an orders || for admin -----------------
 export const viewOrder = async (
     req: Request,
     res: Response,
@@ -23,7 +23,6 @@ export const viewOrder = async (
     const orderID = req.query.orderID as string;
 
     try {
-        
         const orderList = await Order.find({})
             .populate("userID", "fullName email image")
             .skip(page * limit - limit)
@@ -144,6 +143,47 @@ export const checkoutOrder = async (
         res.status(INTERNAL_SERVER_ERROR).json({
             success: false,
             message: label.order.orderError,
+            developerMessage: error.message,
+            result: {},
+        });
+    }
+};
+
+// -------------- View an orders || for user -----------------
+export const viewMyOrder = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+) => {
+    const userID = req.currentUser._id;
+
+    try {
+        const orderList = await Order.find({
+            userID,
+        });
+        const totalOrders = await Order.countDocuments({userID});
+        if (orderList.length > 0) {
+            return res.status(SUCCESS).json({
+                success: true,
+                message: label.order.orderViewed,
+                developerMessage: "",
+                total: totalOrders,
+                result: orderList,
+            });
+        } else {
+            return res.status(BAD_REQUEST).json({
+                success: true,
+                message: label.order.emptyOrder,
+                developerMessage: "",
+                total: totalOrders,
+                result: [],
+            });
+        }
+    } catch (error) {
+        console.log(error);
+        res.status(INTERNAL_SERVER_ERROR).json({
+            success: false,
+            message: label.order.orderNotViewed,
             developerMessage: error.message,
             result: {},
         });
