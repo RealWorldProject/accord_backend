@@ -42,7 +42,7 @@ describe("POST /user", () => {
     });
 
     const token =
-        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwZjkxMzEwZDE1NzlhMDFmYzNjYTk3YiIsImlhdCI6MTYyODA5NDIwNX0.j6Q0NOkc3EVxlVFWmU79LBcWvO_AnK5la4dkOgFBYW0";
+        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYxMTM1Mzg3MjU2ZmMxNDI2MGNjYjQ1MCIsImlhdCI6MTYyODY1OTQzNn0.3cttT3k6_aOug_ptugEswFyuhj4YchcuQbgH4q5u9y4";
     describe("when users try to view profile", () => {
         test("should respond with a 200 status code", async () => {
             const response = await request(app)
@@ -70,6 +70,20 @@ describe("POST /user", () => {
                 .set("authorization", "Bearer " + token)
                 .send({
                     suspensionMessage: "This is for Testing",
+                });
+            expect(response.statusCode).toBe(200);
+        });
+    });
+
+    describe("\nPATCH /user/profile || When user tries to edit profile", () => {
+        test("should return 200 response", async () => {
+            const response = await request(app)
+                .patch("/api/v1/user/profile/61135387256fc14260ccb450")
+                .set("authorization", "Bearer " + token)
+                .send({
+                    fullName: "Dayaram Mahato",
+                    phoneNumber: "9805900177",
+                    image: "https://lh3.googleusercontent.com/ogw/ADea4I4MXz5_7Rhykf8b-7dbDsn5S9iPOM6vgBt869TwnQ=s83-c-mo",
                 });
             expect(response.statusCode).toBe(200);
         });

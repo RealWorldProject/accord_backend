@@ -5,7 +5,7 @@ import label from "../label/label";
 import User from "../models/User.model";
 import { ErrorType } from "../types/interfaces";
 import { encryptPassword } from "../utilities/auth.utilities";
-import { suspendUserValidation, userValidation } from "../validations/user.validations";
+import { editProfileValidation, suspendUserValidation, userValidation } from "../validations/user.validations";
 
 export const validateRegisterBody = (
     req: Request,
@@ -98,6 +98,25 @@ export const validateSuspendUserBody = (
     next: NextFunction
 ) => {
     const { status, message }: ErrorType = suspendUserValidation(req.body);
+
+    if (status) {
+        res.status(BAD_REQUEST).json({
+            success: false,
+            message: message,
+            developerMessage: message,
+            result: [],
+        });
+    } else {
+        next();
+    }
+};
+
+export const validateEditProfileBody = (
+    req: Request,
+    res: Response,
+    next: NextFunction
+) => {
+    const { status, message }: ErrorType = editProfileValidation(req.body);
 
     if (status) {
         res.status(BAD_REQUEST).json({

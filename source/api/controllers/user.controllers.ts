@@ -1,5 +1,8 @@
 import e, { Request, Response, NextFunction } from "express";
-import { ADMIN_PERMISSION_LEVEL, USER_PERMISSION_LEVEL } from "../constants/global.constant";
+import {
+    ADMIN_PERMISSION_LEVEL,
+    USER_PERMISSION_LEVEL,
+} from "../constants/global.constant";
 import {
     SUCCESS,
     BAD_REQUEST,
@@ -249,14 +252,14 @@ export const viewUsers = async (
         const user = trimObject({
             isArchived: false,
             _id: userID,
-            permissionLevel: USER_PERMISSION_LEVEL
+            permissionLevel: USER_PERMISSION_LEVEL,
         });
         const userList = await User.find(user)
             .skip(page * limit - limit)
             .limit(limit);
         const totalUsers = await User.countDocuments(user);
 
-        if (totalUsers > 0 ) {
+        if (totalUsers > 0) {
             return res.status(SUCCESS).json({
                 success: true,
                 message: label.auth.userViewed,
@@ -265,7 +268,7 @@ export const viewUsers = async (
                 page,
                 total: totalUsers,
             });
-        } else{
+        } else {
             return res.status(SUCCESS).json({
                 success: true,
                 message: label.auth.noUser,
@@ -273,9 +276,8 @@ export const viewUsers = async (
                 result: [],
                 page,
                 total: totalUsers,
-            })
+            });
         }
-
     } catch (error) {
         return res.status(INTERNAL_SERVER_ERROR).json({
             success: false,
@@ -329,6 +331,57 @@ export const suspendUser = async (
         res.status(INTERNAL_SERVER_ERROR).json({
             success: false,
             message: label.auth.userSuspensionError,
+            developerMessage: error.message,
+            result: {},
+        });
+    }
+};
+
+// ------------ Edit user profile ----------------------
+export const editProfile = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+) => {
+    const userID = req.currentUser._id;
+
+    try {
+        const userData = trimObject(req.body);
+        const user = await User.findOne({
+            _id: userID,
+            isArchived: false,
+            isSuspended: false,
+        });
+
+        if (user) {
+            const updatedUser = await User.findOneAndUpdate(
+                {_id: userID},
+                {
+                    $set: userData
+                },
+                {new: true}
+            )
+            const returnData = {
+                _id: updatedUser?._id,
+                fullName: updatedUser?.fullName,
+                email: updatedUser?.email,
+                image: updatedUser?.image,
+                phoneNumber: updatedUser?.phoneNumber
+            }
+            return res.status(SUCCESS).json({
+                success: true,
+                message: label.auth.profileUpdated,
+                developerMessage: "",
+                result: returnData,
+            });
+        } else {
+            // sorry
+        }
+    } catch (error) {
+        console.error(error);
+        res.status(INTERNAL_SERVER_ERROR).json({
+            success: false,
+            message: label.auth.profileNotUpdated,
             developerMessage: error.message,
             result: {},
         });
