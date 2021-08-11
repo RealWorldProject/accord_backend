@@ -50,3 +50,41 @@ export const suspendUserValidation = (data: any): ErrorType => {
     }
     return error;
 };
+
+export const editProfileValidation = (data: any): ErrorType => {
+    let error: ErrorType = {
+        status: false,
+        message: "",
+    };
+
+    if (data.hasOwnProperty("fullName")) {
+        if (isEmpty(data?.fullName)) {
+            error.status = true;
+            error.message = label.auth.validation("fullName");
+        }
+    } else {
+        error.status = true;
+        error.message = label.auth.validation("Full Name");
+    }
+
+    if (data.hasOwnProperty("phoneNumber")) {
+        if (isEmpty(data?.phoneNumber)) {
+            error.status = true;
+            error.message = label.auth.validation("phoneNumber");
+        }
+    } else {
+        error.status = true;
+        error.message = label.auth.validation("Phone Number");
+    }
+
+    if (data.hasOwnProperty("image")) {
+        if (isEmpty(data?.image)) {
+            error.status = true;
+            error.message = label.auth.validation("image");
+        }
+    } else {
+        error.status = true;
+        error.message = label.auth.validation("Image");
+    }
+    return error;
+};

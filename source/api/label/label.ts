@@ -31,6 +31,8 @@ export default {
             "Sorry, User has not been suspended. Please Try Again",
         userSuspendedSuccess: "User has been suspended.",
         alreadySuspendedUser: "This user has already suspended.",
+        profileUpdated: "Your profile has been updated successfully.",
+        profileNotUpdated: "Your profile has not been updated. Please Try Again."
     },
 
     postBook: {

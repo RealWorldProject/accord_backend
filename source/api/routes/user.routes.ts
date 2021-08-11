@@ -6,8 +6,10 @@ import {
     USER_PROFILE,
     SUSPEND_USER,
     VIEW_USERS,
+    EDIT_PROFILE,
 } from "../constants/user.constants";
 import {
+    editProfile,
     loginAdmin,
     loginUser,
     registerUser,
@@ -21,6 +23,7 @@ import {
 } from "../middleware/authentication.middleware";
 import {
     createSuperUser,
+    validateEditProfileBody,
     validateRegisterBody,
     validateSuspendUserBody,
 } from "../middleware/user.middlewares";
@@ -43,6 +46,12 @@ userRoutes.patch(
     isAdmin,
     validateSuspendUserBody,
     suspendUser
+);
+
+userRoutes.patch(
+    EDIT_PROFILE,
+    authenticateToken,
+    editProfile
 );
 
 export = userRoutes;
