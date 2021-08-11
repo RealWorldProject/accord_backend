@@ -125,5 +125,8 @@ export default {
         noBookFound: "Book Not Found.",
         notAuthorize: "Not authorize to exchange a book.",
         validation: (field: string) => `${field} is required.`,
+        requestViewed: "All the request has been displayed.",
+        requestNotViewed: "Requests has not been displayed.",
+        noRequest: "No any request has been found.",
     },
 };

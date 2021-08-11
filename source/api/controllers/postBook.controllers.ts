@@ -178,7 +178,9 @@ export const viewBooks = async (req: Request, res: Response) => {
         });
         const books = await PostBook.find(query)
             .skip(page * limit - limit)
-            .limit(limit);
+            .limit(limit)
+            .populate("userId", "fullName email image")
+            .populate("category", "category");
         const totalBooks = await PostBook.countDocuments(query);
         if (books.length > 0 && totalBooks > 0) {
             return res.status(SUCCESS).json({

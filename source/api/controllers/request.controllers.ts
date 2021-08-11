@@ -4,6 +4,7 @@ import {
     CREATED,
     INTERNAL_SERVER_ERROR,
     SUCCESS,
+    UNAUTHORIZED,
 } from "../constants/status-codes.constants";
 import label from "../label/label";
 import PostBook from "../models/PostBook.model";
@@ -30,7 +31,7 @@ export const requestBook = async (
             isArchived: false,
         });
         if (!exchangeBook) {
-            return res.status(BAD_REQUEST).json({
+            return res.status(UNAUTHORIZED).json({
                 success: false,
                 message: label.request.notAuthorize,
                 developerMessage: "",
@@ -40,7 +41,7 @@ export const requestBook = async (
         // tyo book user ko ho ki haina
         if (exchangeBook?.userId.toString() !== user._id.toString()) {
             // book tyo user ko haina
-            return res.status(BAD_REQUEST).json({
+            return res.status(UNAUTHORIZED).json({
                 success: false,
                 message: label.request.notAuthorize,
                 developerMessage: "",
@@ -87,6 +88,88 @@ export const requestBook = async (
         res.status(INTERNAL_SERVER_ERROR).json({
             success: false,
             message: label.request.requestError,
+            developerMessage: error.message,
+            result: {},
+        });
+    }
+};
+
+// --------------- Incoming request ------------------
+export const incomingRequest = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+) => {
+    const userID = req.currentUser._id;
+    try {
+        const requestList = await RequestBook.find({
+            requestedBookOwner: userID,
+        })
+            .populate("user", "image, fullName, email")
+            .populate("requestedBookOwner", "image, fullName, email")
+            .populate("proposedExchangeBook")
+            .populate("requestedBook");
+        if (requestList.length > 0) {
+            return res.status(SUCCESS).json({
+                success: true,
+                message: label.request.requestViewed,
+                developerMessage: "",
+                result: requestList,
+            });
+        } else {
+            return res.status(BAD_REQUEST).json({
+                success: true,
+                message: label.request.noRequest,
+                developerMessage: "",
+                result: [],
+            });
+        }
+    } catch (error) {
+        console.log(error);
+        res.status(INTERNAL_SERVER_ERROR).json({
+            success: false,
+            message: label.request.requestNotViewed,
+            developerMessage: error.message,
+            result: {},
+        });
+    }
+};
+
+// --------------- My request ------------------
+export const myRequest = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+) => {
+    const userID = req.currentUser._id;
+    try {
+        const requestList = await RequestBook.find({
+            user: userID,
+        })
+            .populate("user", "image, fullName, email")
+            .populate("requestedBookOwner", "image, fullName, email")
+            .populate("proposedExchangeBook")
+            .populate("requestedBook");
+        if (requestList.length > 0) {
+            return res.status(SUCCESS).json({
+                success: true,
+                message: label.request.requestViewed,
+                developerMessage: "",
+                result: requestList,
+            });
+        } else {
+            return res.status(BAD_REQUEST).json({
+                success: true,
+                message: label.request.noRequest,
+                developerMessage: "",
+                result: [],
+            });
+        }
+    } catch (error) {
+        console.log(error);
+        res.status(INTERNAL_SERVER_ERROR).json({
+            success: false,
+            message: label.request.requestNotViewed,
             developerMessage: error.message,
             result: {},
         });
