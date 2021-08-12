@@ -1,12 +1,16 @@
 import express from "express";
 import {
+    ACCEPT_REQUEST,
     INCOMING_REQUEST,
     MY_REQUEST,
+    REJECT_REQUEST,
     REQUEST_BOOK,
 } from "../constants/request.constants";
 import {
+    acceptRequest,
     incomingRequest,
     myRequest,
+    rejectRequest,
     requestBook,
 } from "../controllers/request.controllers";
 import { authenticateToken } from "../middleware/authentication.middleware";
@@ -24,4 +28,9 @@ requestRoutes.post(
 requestRoutes.get(INCOMING_REQUEST, authenticateToken, incomingRequest);
 
 requestRoutes.get(MY_REQUEST, authenticateToken, myRequest);
+
+requestRoutes.patch(ACCEPT_REQUEST, authenticateToken, acceptRequest);
+
+requestRoutes.patch(REJECT_REQUEST, authenticateToken, rejectRequest);
+
 export = requestRoutes;

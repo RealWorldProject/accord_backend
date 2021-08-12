@@ -57,4 +57,22 @@ describe("APIs /requests", () => {
             expect(response.statusCode).toBe(200);
         });
     });
+
+    describe("\n PATCH /request/accept || when user tries to accept request", () => {
+        test("should respond with a 200 status code", async () => {
+            const response = await request(app)
+                .patch(baseUrl + `/request/accept/6113fecc260cbe09b007d6c6`)
+                .set("authorization", `Bearer ${token}`);
+            expect(response.statusCode).toBe(200);
+        });
+    });
+
+    describe("\n PATCH /request/reject || when user tries to reject request", () => {
+        test("should respond with a 200 status code", async () => {
+            const response = await request(app)
+                .patch(baseUrl + `/request/reject/6113ef1f92fa150090b7ea53`)
+                .set("authorization", `Bearer ${token}`);
+            expect(response.statusCode).toBe(200);
+        });
+    });
 });

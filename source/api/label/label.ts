@@ -128,5 +128,12 @@ export default {
         requestViewed: "All the request has been displayed.",
         requestNotViewed: "Requests has not been displayed.",
         noRequest: "No any request has been found.",
+        getRequestStatus: "Status of the request was retrieved.",
+        errorGettingRequestStatus: "Status of the request does not retrieved.",
+        requestAccepted: "Request for a book has been accepted.",
+        requestNotAccepted: "Error in accepting a request for a book.",
+        requestRejected: "Request for a book has been rejected.",
+        requestNotRejected: "Error in rejecting a request for a book.",
+        notAvailable: "Sorry, the book is not available for exchange.",
     },
 };
