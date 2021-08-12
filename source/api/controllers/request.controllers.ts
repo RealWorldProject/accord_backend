@@ -7,9 +7,10 @@ import {
     UNAUTHORIZED,
 } from "../constants/status-codes.constants";
 import label from "../label/label";
-import PostBook from "../models/PostBook.model";
+import PostBook, { PostBookDocument } from "../models/PostBook.model";
 import RequestBook from "../models/Request.model";
 import Notification from "../models/Notification.model";
+import { UserDocument } from "../models/User.model";
 
 // -------------- Request a book -------------------
 export const requestBook = async (
@@ -49,6 +50,15 @@ export const requestBook = async (
             });
         }
         if (book) {
+            if (book.isAvailableForExchange === false) {
+                //
+                return res.status(BAD_REQUEST).json({
+                    success: false,
+                    message: label.request.notAvailable,
+                    developerMessage: "",
+                    result: {},
+                });
+            }
             const requestObj = new RequestBook({
                 user: user._id,
                 proposedExchangeBook,
@@ -146,8 +156,8 @@ export const myRequest = async (
         const requestList = await RequestBook.find({
             user: userID,
         })
-            .populate("user", "image, fullName, email")
-            .populate("requestedBookOwner", "image, fullName, email")
+            .populate("user", "image fullName email")
+            .populate("requestedBookOwner", "image fullName email")
             .populate("proposedExchangeBook")
             .populate("requestedBook");
         if (requestList.length > 0) {
@@ -170,6 +180,102 @@ export const myRequest = async (
         res.status(INTERNAL_SERVER_ERROR).json({
             success: false,
             message: label.request.requestNotViewed,
+            developerMessage: error.message,
+            result: {},
+        });
+    }
+};
+
+// --------------- Accept request ------------------
+export const acceptRequest = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+) => {
+    const requestID = req?.params?.requestID;
+    try {
+        const request = await RequestBook.findOne({ _id: requestID })
+            .populate("user", "image fullName email")
+            .populate("requestedBookOwner", "image fullName email")
+            .populate("proposedExchangeBook")
+            .populate("requestedBook");
+        if (request) {
+            request.status = "ACCEPTED";
+            const updatedRequest = await request.save();
+            const bookRequestUser = request.user as UserDocument;
+            const bookOwner = request.requestedBookOwner as UserDocument;
+            const proposedExchangeBook =
+                request.proposedExchangeBook as PostBookDocument;
+            const notificationObj = new Notification({
+                type: "ACCEPTED",
+                user: bookRequestUser._id,
+                requesterPhoto: bookOwner.image,
+                request: request._id,
+                notificationBody: `${bookOwner.fullName} accept your request for ${proposedExchangeBook.name} book.`,
+            });
+            const notification = await notificationObj.save();
+            return res.status(SUCCESS).json({
+                success: true,
+                message: label.request.requestAccepted,
+                developerMessage: "",
+                result: updatedRequest,
+            });
+        } else {
+            throw new Error(label.request.requestNotAccepted);
+        }
+    } catch (error) {
+        console.log(error);
+        res.status(INTERNAL_SERVER_ERROR).json({
+            success: false,
+            message: label.request.requestNotAccepted,
+            developerMessage: error.message,
+            result: {},
+        });
+    }
+};
+
+// --------------- Reject request ------------------
+export const rejectRequest = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+) => {
+    const requestID = req?.params?.requestID;
+    try {
+        const request = await RequestBook.findOne({ _id: requestID })
+            .populate("user", "image fullName email")
+            .populate("requestedBookOwner", "image fullName email")
+            .populate("proposedExchangeBook")
+            .populate("requestedBook");
+        if (request) {
+            request.status = "REJECTED";
+            const updatedRequest = await request.save();
+            const bookRequestUser = request.user as UserDocument;
+            const bookOwner = request.requestedBookOwner as UserDocument;
+            const proposedExchangeBook =
+                request.proposedExchangeBook as PostBookDocument;
+            const notificationObj = new Notification({
+                type: "REJECTED",
+                user: bookRequestUser._id,
+                requesterPhoto: bookOwner.image,
+                request: request._id,
+                notificationBody: `${bookOwner.fullName} reject your request for ${proposedExchangeBook.name} book.`,
+            });
+            const notification = await notificationObj.save();
+            return res.status(SUCCESS).json({
+                success: true,
+                message: label.request.requestRejected,
+                developerMessage: "",
+                result: updatedRequest,
+            });
+        } else {
+            throw new Error(label.request.requestNotRejected);
+        }
+    } catch (error) {
+        console.log(error);
+        res.status(INTERNAL_SERVER_ERROR).json({
+            success: false,
+            message: label.request.requestNotRejected,
             developerMessage: error.message,
             result: {},
         });
