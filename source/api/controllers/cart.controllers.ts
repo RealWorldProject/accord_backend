@@ -77,7 +77,7 @@ export const addToCart = async (
                 const trimmedCart = newCart.cartItems.map((item) => {
                     const book = item.book as PostBookDocument;
                     return {
-                        _id: book.id,
+                        _id: book._id,
                         name: book.name,
                         images: book.images[0],
                         price: book.price,
@@ -102,10 +102,10 @@ export const addToCart = async (
             });
         }
     } catch (error) {
+        console.log(error);
         res.status(INTERNAL_SERVER_ERROR).json({
             success: false,
             message: label.cart.couldNotAddBooksToCart,
-            systemMessage: error.message,
             developerMessage: error.message,
             result: [],
         });
@@ -187,7 +187,6 @@ export const deleteCartBooks = async (
             isArchived: false,
         });
 
-
         if (bookFound) {
             const cartFound = await Cart.findOne({
                 userID: userID,
@@ -209,7 +208,7 @@ export const deleteCartBooks = async (
                     const cart = await Cart.findOne({
                         userID: userID,
                         isArchived: false,
-                    }).populate("cartItems.book")
+                    }).populate("cartItems.book");
                     const trimmedCart = cart?.cartItems.map((item) => {
                         const book = item.book as PostBookDocument;
                         return {
@@ -261,7 +260,7 @@ export const deleteCartBooks = async (
             });
         }
     } catch (error) {
-        console.log(error)
+        console.log(error);
         res.status(INTERNAL_SERVER_ERROR).json({
             success: false,
             message: label.cart.removeCartBookError,
