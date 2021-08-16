@@ -281,3 +281,44 @@ export const rejectRequest = async (
         });
     }
 };
+
+// --------------- Get notification ------------------
+export const getNotification = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+) => {
+    const userID = req.currentUser._id;
+    try {
+        const notifications = await Notification.find({
+            user: userID,
+        });
+        const totalNotifications = await Notification.countDocuments({
+            user: userID,
+        });
+        if (notifications.length > 0) {
+            return res.status(SUCCESS).json({
+                success: true,
+                message: label.request.getNotifications,
+                developerMessage: "",
+                total: totalNotifications,
+                result: notifications,
+            });
+        } else {
+            return res.status(BAD_REQUEST).json({
+                success: true,
+                message: label.request.emptyNotifications,
+                developerMessage: "",
+                result: [],
+            });
+        }
+    } catch (error) {
+        console.log(error);
+        res.status(INTERNAL_SERVER_ERROR).json({
+            success: false,
+            message: label.request.didNotGetNotification,
+            developerMessage: error.message,
+            result: {},
+        });
+    }
+};

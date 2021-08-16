@@ -135,5 +135,8 @@ export default {
         requestRejected: "Request for a book has been rejected.",
         requestNotRejected: "Error in rejecting a request for a book.",
         notAvailable: "Sorry, the book is not available for exchange.",
+        getNotifications: "All the notifications was shown.",
+        emptyNotifications: "Empty notification found.", 
+        didNotGetNotification: "Error in getting notifications.",
     },
 };
