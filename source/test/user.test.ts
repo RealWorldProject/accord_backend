@@ -78,12 +78,25 @@ describe("POST /user", () => {
     describe("\nPATCH /user/profile || When user tries to edit profile", () => {
         test("should return 200 response", async () => {
             const response = await request(app)
-                .patch("/api/v1/user/profile/61135387256fc14260ccb450")
+                .patch("/api/v1/user/profile")
                 .set("authorization", "Bearer " + token)
                 .send({
                     fullName: "Dayaram Mahato",
                     phoneNumber: "9805900177",
                     image: "https://lh3.googleusercontent.com/ogw/ADea4I4MXz5_7Rhykf8b-7dbDsn5S9iPOM6vgBt869TwnQ=s83-c-mo",
+                });
+            expect(response.statusCode).toBe(200);
+        });
+    });
+
+    describe("\nPATCH /user/password || When user tries to change password", () => {
+        test("should return 200 response", async () => {
+            const response = await request(app)
+                .patch("/api/v1/user/password")
+                .set("authorization", "Bearer " + token)
+                .send({
+                    oldPassword: "123456789",
+                    newPassword: "ashraya",
                 });
             expect(response.statusCode).toBe(200);
         });

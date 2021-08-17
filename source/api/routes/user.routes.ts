@@ -7,8 +7,10 @@ import {
     SUSPEND_USER,
     VIEW_USERS,
     EDIT_PROFILE,
+    CHANGE_PASSWORD_ROUTE,
 } from "../constants/user.constants";
 import {
+    changePassword,
     editProfile,
     loginAdmin,
     loginUser,
@@ -48,10 +50,7 @@ userRoutes.patch(
     suspendUser
 );
 
-userRoutes.patch(
-    EDIT_PROFILE,
-    authenticateToken,
-    editProfile
-);
+userRoutes.patch(EDIT_PROFILE, authenticateToken, editProfile);
 
+userRoutes.patch(CHANGE_PASSWORD_ROUTE, authenticateToken, changePassword);
 export = userRoutes;

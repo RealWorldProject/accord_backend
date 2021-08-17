@@ -355,19 +355,19 @@ export const editProfile = async (
 
         if (user) {
             const updatedUser = await User.findOneAndUpdate(
-                {_id: userID},
+                { _id: userID },
                 {
-                    $set: userData
+                    $set: userData,
                 },
-                {new: true}
-            )
+                { new: true }
+            );
             const returnData = {
                 _id: updatedUser?._id,
                 fullName: updatedUser?.fullName,
                 email: updatedUser?.email,
                 image: updatedUser?.image,
-                phoneNumber: updatedUser?.phoneNumber
-            }
+                phoneNumber: updatedUser?.phoneNumber,
+            };
             return res.status(SUCCESS).json({
                 success: true,
                 message: label.auth.profileUpdated,
@@ -382,6 +382,66 @@ export const editProfile = async (
         res.status(INTERNAL_SERVER_ERROR).json({
             success: false,
             message: label.auth.profileNotUpdated,
+            developerMessage: error.message,
+            result: {},
+        });
+    }
+};
+
+// ------------ change password----------------------
+export const changePassword = async (req: Request, res: Response) => {
+    const userID = req.currentUser._id;
+    const { newPassword, oldPassword } = req.body;
+
+    try {
+        const user = await User.findOne({
+            _id: userID,
+            isArchived: false,
+            isSuspended: false,
+        });
+
+        if (user) {
+            const currentPassword = user.password;
+            const isMatching = await decryptPassword(
+                oldPassword,
+                currentPassword
+            );
+            if (isMatching) {
+                const hashedPassword = await encryptPassword(newPassword);
+                if (hashedPassword.hash) {
+                    user.password = hashedPassword.hash;
+                    const updatedUser = await user.save();
+
+                    return res.status(SUCCESS).json({
+                        success: true,
+                        message: label.auth.passwordChanged,
+                        developerMessage: "",
+                        result: updatedUser,
+                    });
+                } else {
+                    throw new Error(label.auth.hashPasswordError);
+                }
+            } else {
+                return res.status(BAD_REQUEST).json({
+                    success: false,
+                    message: label.auth.passwordDontMatch,
+                    developerMessage: "",
+                    result: {},
+                });
+            }
+        } else {
+            return res.status(BAD_REQUEST).json({
+                success: false,
+                message: label.auth.maybeSuspended,
+                developerMessage: "",
+                result: {},
+            });
+        }
+    } catch (error) {
+        console.error(error);
+        res.status(INTERNAL_SERVER_ERROR).json({
+            success: false,
+            message: label.auth.passwordChangeError,
             developerMessage: error.message,
             result: {},
         });

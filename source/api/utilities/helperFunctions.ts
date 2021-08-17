@@ -26,3 +26,8 @@ export function getRandomOrderNumber(
 ): number {
     return Math.floor(Math.random() * (max - min)) + min;
 }
+export const getAverageReview = (reviews: number[]): Number => {
+    const sum = reviews.reduce((total, current) => total + current, 0);
+    const num = reviews.length;
+    return sum / num;
+};
