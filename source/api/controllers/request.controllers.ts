@@ -76,12 +76,26 @@ export const requestBook = async (
                     notificationBody: `${user.fullName} requested your ${book.name} book, wants to exchange it for ${exchangeBook.name}`,
                 });
                 const notification = await notificationObj.save();
-                // return
+                // returning populated book for frontend
+
+                const newRequest = await RequestBook.findOne({
+                    _id: request._id,
+                })
+                    .populate("user", "image, fullName, email")
+                    .populate("requestedBookOwner", "image, fullName, email")
+                    .populate({
+                        path: "proposedExchangeBook",
+                        populate: { path: "category" },
+                    })
+                    .populate({
+                        path: "requestedBook",
+                        populate: { path: "category" },
+                    });
                 res.status(SUCCESS).json({
                     success: true,
                     message: label.request.requestAdded,
                     developerMessage: "",
-                    result: request,
+                    result: newRequest,
                 });
             }
         } else {
@@ -117,8 +131,14 @@ export const incomingRequest = async (
         })
             .populate("user", "image, fullName, email")
             .populate("requestedBookOwner", "image, fullName, email")
-            .populate("proposedExchangeBook")
-            .populate("requestedBook");
+            .populate({
+                path: "proposedExchangeBook",
+                populate: { path: "category" },
+            })
+            .populate({
+                path: "requestedBook",
+                populate: { path: "category" },
+            });
         if (requestList.length > 0) {
             return res.status(SUCCESS).json({
                 success: true,
@@ -158,8 +178,14 @@ export const myRequest = async (
         })
             .populate("user", "image fullName email")
             .populate("requestedBookOwner", "image fullName email")
-            .populate("proposedExchangeBook")
-            .populate("requestedBook");
+            .populate({
+                path: "proposedExchangeBook",
+                populate: { path: "category" },
+            })
+            .populate({
+                path: "requestedBook",
+                populate: { path: "category" },
+            });
         if (requestList.length > 0) {
             return res.status(SUCCESS).json({
                 success: true,
@@ -197,8 +223,14 @@ export const acceptRequest = async (
         const request = await RequestBook.findOne({ _id: requestID })
             .populate("user", "image fullName email")
             .populate("requestedBookOwner", "image fullName email")
-            .populate("proposedExchangeBook")
-            .populate("requestedBook");
+            .populate({
+                path: "proposedExchangeBook",
+                populate: { path: "category" },
+            })
+            .populate({
+                path: "requestedBook",
+                populate: { path: "category" },
+            });
         if (request) {
             request.status = "ACCEPTED";
             const updatedRequest = await request.save();
@@ -218,7 +250,7 @@ export const acceptRequest = async (
                 success: true,
                 message: label.request.requestAccepted,
                 developerMessage: "",
-                result: updatedRequest,
+                result: request,
             });
         } else {
             throw new Error(label.request.requestNotAccepted);
@@ -245,8 +277,14 @@ export const rejectRequest = async (
         const request = await RequestBook.findOne({ _id: requestID })
             .populate("user", "image fullName email")
             .populate("requestedBookOwner", "image fullName email")
-            .populate("proposedExchangeBook")
-            .populate("requestedBook");
+            .populate({
+                path: "proposedExchangeBook",
+                populate: { path: "category" },
+            })
+            .populate({
+                path: "requestedBook",
+                populate: { path: "category" },
+            });
         if (request) {
             request.status = "REJECTED";
             const updatedRequest = await request.save();
@@ -266,7 +304,7 @@ export const rejectRequest = async (
                 success: true,
                 message: label.request.requestRejected,
                 developerMessage: "",
-                result: updatedRequest,
+                result: request,
             });
         } else {
             throw new Error(label.request.requestNotRejected);
