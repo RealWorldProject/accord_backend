@@ -136,7 +136,14 @@ export default {
         requestNotRejected: "Error in rejecting a request for a book.",
         notAvailable: "Sorry, the book is not available for exchange.",
         getNotifications: "All the notifications was shown.",
-        emptyNotifications: "Empty notification found.", 
+        emptyNotifications: "Empty notification found.",
         didNotGetNotification: "Error in getting notifications.",
+    },
+
+    review: {
+        reviewSuccess: "Review and rating for the book was added.",
+        reviewError: "Error in adding review and rating for the book.",
+        validation: (field: string) => `${field} is required.`,
+        numberRequired: "Please provide a number value.",
     },
 };
