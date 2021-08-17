@@ -34,6 +34,12 @@ export default {
         profileUpdated: "Your profile has been updated successfully.",
         profileNotUpdated:
             "Your profile has not been updated. Please Try Again.",
+        maybeSuspended: "Sorry, the user is ether not found or is suspended.",
+        passwordChangeError: "Sorry, Your password couldn't be updated.",
+        passwordChanged: "Your password has been updated.",
+        hashPasswordError: "Couldn't hash the password.",
+        passwordDontMatch:
+            "Sorry, the password you provided doesn't match with the old password.",
     },
 
     postBook: {
