@@ -147,7 +147,7 @@ export const incomingRequest = async (
                 result: requestList,
             });
         } else {
-            return res.status(BAD_REQUEST).json({
+            return res.status(SUCCESS).json({
                 success: true,
                 message: label.request.noRequest,
                 developerMessage: "",
@@ -194,7 +194,7 @@ export const myRequest = async (
                 result: requestList,
             });
         } else {
-            return res.status(BAD_REQUEST).json({
+            return res.status(SUCCESS).json({
                 success: true,
                 message: label.request.noRequest,
                 developerMessage: "",
