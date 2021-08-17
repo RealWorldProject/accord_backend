@@ -75,4 +75,13 @@ describe("APIs /requests", () => {
             expect(response.statusCode).toBe(200);
         });
     });
+
+    describe("\n GET /notification || when user tries to view notifications", () => {
+        test("should respond with a 200 status code", async () => {
+            const response = await request(app)
+                .get(baseUrl + `/notifications`)
+                .set("authorization", `Bearer ${token}`);
+            expect(response.statusCode).toBe(200);
+        });
+    });
 });

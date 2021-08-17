@@ -11,6 +11,7 @@ import cors from "cors";
 import cartRoutes from "../api/routes/cart.routes";
 import orderRoutes from "../api/routes/order.routes";
 import requestRoutes from "../api/routes/request.routes";
+import reviewRoutes from "../api/routes/review.routes";
 
 const VERSION = "/api/v1";
 
@@ -48,6 +49,7 @@ app.use(VERSION, uploadRoutes);
 app.use(VERSION, cartRoutes);
 app.use(VERSION, orderRoutes);
 app.use(VERSION, requestRoutes);
+app.use(VERSION, reviewRoutes);
 
 // const mongoURI =
 //     process.env.MONGO_URI ||
