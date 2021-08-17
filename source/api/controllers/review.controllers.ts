@@ -1,10 +1,13 @@
 import { Request, Response, NextFunction } from "express";
 import {
+    BAD_REQUEST,
     CREATED,
     INTERNAL_SERVER_ERROR,
+    SUCCESS,
 } from "../constants/status-codes.constants";
 import label from "../label/label";
 import Review from "../models/Review.model";
+import { trimObject } from "../utilities/helperFunctions";
 
 // **************** Add review and rating ****************
 export const addReviewAndRating = async (
@@ -43,6 +46,50 @@ export const addReviewAndRating = async (
         res.status(INTERNAL_SERVER_ERROR).json({
             success: false,
             message: label.review.reviewError,
+            developerMessage: error.message,
+            result: {},
+        });
+    }
+};
+
+// **************** Add review and rating ****************
+export const getReviewAndRating = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+) => {
+    const bookID = req?.params?.bookID;
+
+    try {
+        const query = trimObject({
+            book: bookID,
+        });
+        console.log(query);
+        
+        const reviews = await Review.find(query)
+        .populate("user", "fullName email image");
+        const totalReviews = await Review.countDocuments(query);
+        if (reviews.length > 0) {
+            return res.status(SUCCESS).json({
+                success: true,
+                message: label.review.reviewsFetch,
+                developerMessage: "",
+                total: totalReviews,
+                result: reviews,
+            });
+        } else {
+            return res.status(BAD_REQUEST).json({
+                success: true,
+                message: label.review.noReviews,
+                developerMessage: "",
+                result: [],
+            });
+        }
+    } catch (error) {
+        console.log(error);
+        res.status(INTERNAL_SERVER_ERROR).json({
+            success: false,
+            message: label.review.reviewsFetchError,
             developerMessage: error.message,
             result: {},
         });

@@ -145,5 +145,8 @@ export default {
         reviewError: "Error in adding review and rating for the book.",
         validation: (field: string) => `${field} is required.`,
         numberRequired: "Please provide a number value.",
+        reviewsFetch: "All the reviews of the book was displayed.",
+        reviewsFetchError: "Error in getting the reviews of the book.",
+        noReviews: "No any reviews has been made for this book.",
     },
 };

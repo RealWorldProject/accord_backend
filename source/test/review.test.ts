@@ -39,4 +39,13 @@ describe("APIs /reviews", () => {
             expect(response.statusCode).toBe(201);
         });
     });
+
+    describe("\n GET /reviews || when user tries to view reviews and ratings of the book", () => {
+        test("should respond with a 200 status code", async () => {
+            const response = await request(app)
+                .get(baseUrl + `/review/6117dd757e300f1f1c60b66c`)
+                .set("authorization", `Bearer ${token}`);
+            expect(response.statusCode).toBe(200);
+        });
+    });
 });
