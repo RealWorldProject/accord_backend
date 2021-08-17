@@ -85,11 +85,11 @@ export const requestBook = async (
                     .populate("requestedBookOwner", "image, fullName, email")
                     .populate({
                         path: "proposedExchangeBook",
-                        populate: { path: "category" },
+                        populate: { path: "category userId" },
                     })
                     .populate({
                         path: "requestedBook",
-                        populate: { path: "category" },
+                        populate: { path: "category userId" },
                     });
                 res.status(SUCCESS).json({
                     success: true,
@@ -133,11 +133,11 @@ export const incomingRequest = async (
             .populate("requestedBookOwner", "image, fullName, email")
             .populate({
                 path: "proposedExchangeBook",
-                populate: { path: "category" },
+                populate: { path: "category userId" },
             })
             .populate({
                 path: "requestedBook",
-                populate: { path: "category" },
+                populate: { path: "category userId" },
             });
         if (requestList.length > 0) {
             return res.status(SUCCESS).json({
@@ -180,11 +180,11 @@ export const myRequest = async (
             .populate("requestedBookOwner", "image fullName email")
             .populate({
                 path: "proposedExchangeBook",
-                populate: { path: "category" },
+                populate: { path: "category userId" },
             })
             .populate({
                 path: "requestedBook",
-                populate: { path: "category" },
+                populate: { path: "category userId" },
             });
         if (requestList.length > 0) {
             return res.status(SUCCESS).json({
@@ -225,11 +225,11 @@ export const acceptRequest = async (
             .populate("requestedBookOwner", "image fullName email")
             .populate({
                 path: "proposedExchangeBook",
-                populate: { path: "category" },
+                populate: { path: "category userId" },
             })
             .populate({
                 path: "requestedBook",
-                populate: { path: "category" },
+                populate: { path: "category userId" },
             });
         if (request) {
             request.status = "ACCEPTED";
@@ -279,11 +279,11 @@ export const rejectRequest = async (
             .populate("requestedBookOwner", "image fullName email")
             .populate({
                 path: "proposedExchangeBook",
-                populate: { path: "category" },
+                populate: { path: "category userId" },
             })
             .populate({
                 path: "requestedBook",
-                populate: { path: "category" },
+                populate: { path: "category userId" },
             });
         if (request) {
             request.status = "REJECTED";
