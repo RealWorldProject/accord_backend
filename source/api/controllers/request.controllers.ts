@@ -343,7 +343,7 @@ export const getNotification = async (
                 result: notifications,
             });
         } else {
-            return res.status(BAD_REQUEST).json({
+            return res.status(SUCCESS).json({
                 success: true,
                 message: label.request.emptyNotifications,
                 developerMessage: "",

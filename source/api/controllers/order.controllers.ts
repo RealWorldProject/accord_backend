@@ -1,6 +1,5 @@
 import { Request, Response, NextFunction } from "express";
 import {
-    BAD_REQUEST,
     CREATED,
     INTERNAL_SERVER_ERROR,
     SUCCESS,
@@ -88,7 +87,7 @@ export const checkoutOrder = async (
             // checking if there are no items in cart
             if (cart.cartItems.length <= 0) {
                 // return no items in cart
-                return res.status(BAD_REQUEST).json({
+                return res.status(SUCCESS).json({
                     success: true,
                     message: label.cart.emptyCart,
                     developerMessage: "",
@@ -161,7 +160,7 @@ export const viewMyOrder = async (
         const orderList = await Order.find({
             userID,
         });
-        const totalOrders = await Order.countDocuments({userID});
+        const totalOrders = await Order.countDocuments({ userID });
         if (orderList.length > 0) {
             return res.status(SUCCESS).json({
                 success: true,
@@ -171,7 +170,7 @@ export const viewMyOrder = async (
                 result: orderList,
             });
         } else {
-            return res.status(BAD_REQUEST).json({
+            return res.status(SUCCESS).json({
                 success: true,
                 message: label.order.emptyOrder,
                 developerMessage: "",
