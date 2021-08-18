@@ -65,9 +65,11 @@ export const getReviewAndRating = async (
             book: bookID,
         });
         console.log(query);
-        
-        const reviews = await Review.find(query)
-        .populate("user", "fullName email image");
+
+        const reviews = await Review.find(query).populate(
+            "user",
+            "fullName email image"
+        );
         const totalReviews = await Review.countDocuments(query);
         if (reviews.length > 0) {
             return res.status(SUCCESS).json({
@@ -78,7 +80,7 @@ export const getReviewAndRating = async (
                 result: reviews,
             });
         } else {
-            return res.status(BAD_REQUEST).json({
+            return res.status(SUCCESS).json({
                 success: true,
                 message: label.review.noReviews,
                 developerMessage: "",
