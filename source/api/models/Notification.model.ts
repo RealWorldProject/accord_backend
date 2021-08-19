@@ -40,6 +40,11 @@ export const notificationSchema = new mongoose.Schema(
             type: String,
             required: true,
         },
+        isArchived: {
+            type: Boolean,
+            required: true,
+            default: false,
+        },
     },
     {
         timestamps: true,

@@ -154,5 +154,11 @@ export default {
         reviewsFetch: "All the reviews of the book was displayed.",
         reviewsFetchError: "Error in getting the reviews of the book.",
         noReviews: "No any reviews has been made for this book.",
+        reviewUpdated: "Review of the book was updated.",
+        errorInReviewUpdate: "Review of the book was not updated.",
+        reviewDeleted: "Review of the book has been deleted.",
+        reviewNotFound: "Review not found.",
+        errorInReviewDelete: "Review of the book was not deleted.",
+        notAuthorized: "Sorry, You are not authorized to perform this action.",
     },
 };

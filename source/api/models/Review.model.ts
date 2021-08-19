@@ -36,6 +36,11 @@ export const reviewSchema = new mongoose.Schema(
             required: true,
             ref: "user",
         },
+        isArchived: {
+            type: Boolean,
+            required: true,
+            default: false,
+        },
     },
     {
         timestamps: true,

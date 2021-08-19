@@ -44,6 +44,11 @@ export const requestSchema = new mongoose.Schema(
             default: "PENDING",
             required: true,
         },
+        isArchived: {
+            type: Boolean,
+            required: true,
+            default: false,
+        },
     },
     {
         timestamps: true,
