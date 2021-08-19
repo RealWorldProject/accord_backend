@@ -57,4 +57,13 @@ describe("APIs /reviews", () => {
             expect(response.statusCode).toBe(200);
         });
     });
+
+    describe("\n DELETE /review/delete || when user tries to delete reviews and ratings of the book", () => {
+        test("should respond with a 200 status code", async () => {
+            const response = await request(app)
+                .delete(baseUrl + `/review/611e0258698d6527a8407d42`)
+                .set("authorization", `Bearer ${token}`);
+            expect(response.statusCode).toBe(200);
+        });
+    });
 });

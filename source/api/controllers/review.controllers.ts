@@ -4,6 +4,7 @@ import {
     CREATED,
     INTERNAL_SERVER_ERROR,
     SUCCESS,
+    UNAUTHORIZED,
 } from "../constants/status-codes.constants";
 import label from "../label/label";
 import Review from "../models/Review.model";
@@ -143,6 +144,63 @@ export const editReviewAndRating = async (
         res.status(INTERNAL_SERVER_ERROR).json({
             success: false,
             message: label.review.errorInReviewUpdate,
+            developerMessage: error.message,
+            result: {},
+        });
+    }
+};
+
+// **************** Delete review and rating ****************
+export const deleteReviewAndRating = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+) => {
+    const reviewID = req?.params?.reviewID;
+
+    try {
+        const review = await Review.findOne({
+            _id: reviewID,
+            isArchived: false,
+        });
+
+        if (review) {
+            if (review.user.toString() === req.currentUser._id.toString()) {
+                review.isArchived = true;
+                const updatedReview = await review
+                    .save()
+                    .then((updatedReview) =>
+                        updatedReview
+                            .populate("user", "fullName email image")
+                            .execPopulate()
+                    );
+                return res.status(SUCCESS).json({
+                    success: true,
+                    message: label.review.reviewDeleted,
+                    developerMessage: "",
+                    result: updatedReview,
+                });
+            } else {
+                return res.status(UNAUTHORIZED).json({
+                    success: false,
+                    message: label.review.notAuthorized,
+                    developerMessage: "",
+                    result: review,
+                });
+            }
+        } else {
+            res.status(BAD_REQUEST).json({
+                success: false,
+                message: label.review.reviewNotFound,
+                developerMessage: "",
+                result: {},
+            });
+        }
+    } catch (error) {
+        console.log(error);
+        res.status(INTERNAL_SERVER_ERROR).json({
+            success: false,
+            message: label.review.errorInReviewDelete,
             developerMessage: error.message,
             result: {},
         });
