@@ -27,7 +27,7 @@ const token =
 const baseUrl = "/api/v1/";
 
 describe("APIs /reviews", () => {
-    describe("\n POST /reviews || when user tries to give reviews and ratings to a book", () => {
+    describe("\n POST /review/add || when user tries to give reviews and ratings to a book", () => {
         test("should respond with a 201 status code", async () => {
             const response = await request(app)
                 .post(baseUrl + `/review/6117dd757e300f1f1c60b66c`)
@@ -40,10 +40,19 @@ describe("APIs /reviews", () => {
         });
     });
 
-    describe("\n GET /reviews || when user tries to view reviews and ratings of the book", () => {
+    describe("\n GET /review/get || when user tries to view reviews and ratings of the book", () => {
         test("should respond with a 200 status code", async () => {
             const response = await request(app)
                 .get(baseUrl + `/review/6117dd757e300f1f1c60b66c`)
+                .set("authorization", `Bearer ${token}`);
+            expect(response.statusCode).toBe(200);
+        });
+    });
+
+    describe("\n PATCH /review/edit || when user tries to edit reviews and ratings of the book", () => {
+        test("should respond with a 200 status code", async () => {
+            const response = await request(app)
+                .get(baseUrl + `/review/611e018e1e8e6f370825695c`)
                 .set("authorization", `Bearer ${token}`);
             expect(response.statusCode).toBe(200);
         });

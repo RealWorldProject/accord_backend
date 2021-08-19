@@ -52,7 +52,7 @@ export const addReviewAndRating = async (
     }
 };
 
-// **************** Add review and rating ****************
+// **************** Get review and rating ****************
 export const getReviewAndRating = async (
     req: Request,
     res: Response,
@@ -64,7 +64,6 @@ export const getReviewAndRating = async (
         const query = trimObject({
             book: bookID,
         });
-        console.log(query);
 
         const reviews = await Review.find(query).populate(
             "user",
@@ -92,6 +91,58 @@ export const getReviewAndRating = async (
         res.status(INTERNAL_SERVER_ERROR).json({
             success: false,
             message: label.review.reviewsFetchError,
+            developerMessage: error.message,
+            result: {},
+        });
+    }
+};
+
+// **************** Edit review and rating ****************
+export const editReviewAndRating = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+) => {
+    const reviewID = req?.params?.reviewID;
+
+    try {
+        const userReview = trimObject(req.body);
+        const review = await Review.findOne({
+            isArchived: false,
+        });
+
+        if (review) {
+            const updatedReview = await Review.findOneAndUpdate(
+                { _id: reviewID },
+                {
+                    $set: userReview,
+                },
+                { new: true }
+            );
+            const returnReviews = {
+                _id: updatedReview?._id,
+                review: updatedReview?.review,
+                rating: updatedReview?.rating,
+            };
+            return res.status(SUCCESS).json({
+                success: true,
+                message: label.review.reviewUpdated,
+                developerMessage: "",
+                result: returnReviews,
+            });
+        } else {
+            res.status(BAD_REQUEST).json({
+                success: false,
+                message: label.review.errorInReviewUpdate,
+                developerMessage: "",
+                result: {},
+            });
+        }
+    } catch (error) {
+        console.log(error);
+        res.status(INTERNAL_SERVER_ERROR).json({
+            success: false,
+            message: label.review.errorInReviewUpdate,
             developerMessage: error.message,
             result: {},
         });

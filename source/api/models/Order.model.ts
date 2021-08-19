@@ -110,6 +110,11 @@ export const orderSchema = new mongoose.Schema(
             type: Number,
             required: true,
         },
+        isArchived: {
+            type: Boolean,
+            required: true,
+            default: false,
+        },
     },
     {
         timestamps: true,
