@@ -31,7 +31,7 @@ export const addReviewAndRating = async (
             .save()
             .then((userReviewRating) =>
                 userReviewRating
-                    .populate("userId", "fullName email image")
+                    .populate("user", "fullName email image")
                     .execPopulate()
             );
         if (reviewRating) {
@@ -63,6 +63,7 @@ export const getReviewAndRating = async (
 
     try {
         const query = trimObject({
+            isArchived: false,
             book: bookID,
         });
 
@@ -109,28 +110,33 @@ export const editReviewAndRating = async (
     try {
         const userReview = trimObject(req.body);
         const review = await Review.findOne({
+            _id: reviewID,
             isArchived: false,
         });
 
         if (review) {
-            const updatedReview = await Review.findOneAndUpdate(
-                { _id: reviewID },
-                {
-                    $set: userReview,
-                },
-                { new: true }
-            );
-            const returnReviews = {
-                _id: updatedReview?._id,
-                review: updatedReview?.review,
-                rating: updatedReview?.rating,
-            };
-            return res.status(SUCCESS).json({
-                success: true,
-                message: label.review.reviewUpdated,
-                developerMessage: "",
-                result: returnReviews,
-            });
+            if (review.user.toString() === req.currentUser._id.toString()) {
+                const updatedReview = await Review.findOneAndUpdate(
+                    { _id: reviewID },
+                    {
+                        $set: userReview,
+                    },
+                    { new: true }
+                ).populate("user", "fullName email image");
+                return res.status(SUCCESS).json({
+                    success: true,
+                    message: label.review.reviewUpdated,
+                    developerMessage: "",
+                    result: updatedReview,
+                });
+            } else {
+                return res.status(UNAUTHORIZED).json({
+                    success: false,
+                    message: label.review.notAuthorized,
+                    developerMessage: "",
+                    result: review,
+                });
+            }
         } else {
             res.status(BAD_REQUEST).json({
                 success: false,
