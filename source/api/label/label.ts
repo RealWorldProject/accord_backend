@@ -40,6 +40,8 @@ export default {
         hashPasswordError: "Couldn't hash the password.",
         passwordDontMatch:
             "Sorry, the password you provided doesn't match with the old password.",
+        oldAndNewAreSame:
+            "Sorry, The old password and new password can't be same.",
     },
 
     postBook: {

@@ -407,6 +407,16 @@ export const changePassword = async (req: Request, res: Response) => {
                 currentPassword
             );
             if (isMatching) {
+                // checking if old and new password is the same
+
+                if (oldPassword === newPassword) {
+                    return res.status(BAD_REQUEST).json({
+                        success: false,
+                        message: label.auth.oldAndNewAreSame,
+                        developerMessage: "",
+                        result: {},
+                    });
+                }
                 const hashedPassword = await encryptPassword(newPassword);
                 if (hashedPassword.hash) {
                     user.password = hashedPassword.hash;
