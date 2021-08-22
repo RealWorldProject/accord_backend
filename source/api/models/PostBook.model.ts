@@ -85,7 +85,7 @@ export const postBookSchema = new mongoose.Schema<PostBookDocument>(
         rating: {
             type: Number,
             required: true,
-            default: 1,
+            default: 0,
         },
     },
     {
