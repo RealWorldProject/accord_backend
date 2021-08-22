@@ -2,12 +2,15 @@ import { Request, Response, NextFunction } from "express";
 import {
     CREATED,
     INTERNAL_SERVER_ERROR,
+    FORBIDDEN,
     SUCCESS,
+    BAD_REQUEST,
 } from "../constants/status-codes.constants";
 import label from "../label/label";
 import Cart from "../models/Cart.model";
 import Order from "../models/Order.model";
 import { PostBookDocument } from "../models/PostBook.model";
+import { StockCheck } from "../types/interfaces";
 import { getRandomOrderNumber, trimObject } from "../utilities/helperFunctions";
 
 // -------------- View an orders || for admin -----------------
@@ -95,8 +98,17 @@ export const checkoutOrder = async (
                 });
             }
             let orderTotalPrice = 0;
+            const stockCheck: StockCheck = {
+                isSomeBookIsOutOfStock: false,
+                bookName: "",
+            };
             const orderItems = cart.cartItems.map((item) => {
                 const book = item.book as PostBookDocument;
+                // checking if the book is out of stock
+                if (item.quantity > book.stock) {
+                    stockCheck.isSomeBookIsOutOfStock = true;
+                    stockCheck.bookName = book.name;
+                }
                 // calculating total price of order
                 orderTotalPrice += item.totalPrice;
                 return {
@@ -108,6 +120,15 @@ export const checkoutOrder = async (
                     totalPrice: item.totalPrice,
                 };
             });
+            // check for any of of stock books
+            if (stockCheck.isSomeBookIsOutOfStock) {
+                return res.status(FORBIDDEN).json({
+                    success: true,
+                    message: label.order.stockNotAvailable(stockCheck.bookName),
+                    developerMessage: "",
+                    result: {},
+                });
+            }
             const orderObj = new Order({
                 orderID: getRandomOrderNumber(),
                 fullName,
@@ -125,6 +146,13 @@ export const checkoutOrder = async (
             const order = await orderObj.save();
             // empty the cart after order is placed
             if (order) {
+                // decrease quantity
+                cart.cartItems.forEach(async (item) => {
+                    const book = item.book as PostBookDocument;
+                    // stock check is not required because its already done above
+                    const newBook = await book.decreaseQuantity(item.quantity);
+                });
+                // resetting the cart
                 cart.cartItems = [];
                 await cart.save();
             }
@@ -135,7 +163,12 @@ export const checkoutOrder = async (
                 result: order,
             });
         } else {
-            res.send("Here");
+            return res.status(BAD_REQUEST).json({
+                success: false,
+                message: label.cart.cartNotFound,
+                developerMessage: "",
+                result: {},
+            });
         }
     } catch (error) {
         console.error(error);

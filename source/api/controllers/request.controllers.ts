@@ -238,6 +238,7 @@ export const acceptRequest = async (
             const bookOwner = request.requestedBookOwner as UserDocument;
             const proposedExchangeBook =
                 request.proposedExchangeBook as PostBookDocument;
+            await proposedExchangeBook.decreaseQuantity(1);
             const notificationObj = new Notification({
                 type: "ACCEPTED",
                 user: bookRequestUser._id,

@@ -23,10 +23,6 @@ export const reviewValidation = (data: any): ErrorType => {
             error.status = true;
             error.message = label.review.validation("Rating");
         }
-        if (!isNumber(data?.rating)) {
-            error.status = true;
-            error.message = label.review.numberRequired;
-        }
     } else {
         error.status = true;
         error.message = label.review.validation("Rating");

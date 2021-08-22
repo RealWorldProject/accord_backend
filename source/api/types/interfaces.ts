@@ -5,4 +5,9 @@ type ErrorType = {
     message: string;
 };
 
-export type { ErrorType };
+type StockCheck = {
+    isSomeBookIsOutOfStock: boolean;
+    bookName: string;
+};
+
+export type { ErrorType, StockCheck };

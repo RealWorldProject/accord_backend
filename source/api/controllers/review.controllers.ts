@@ -7,8 +7,9 @@ import {
     UNAUTHORIZED,
 } from "../constants/status-codes.constants";
 import label from "../label/label";
+import PostBook from "../models/PostBook.model";
 import Review from "../models/Review.model";
-import { trimObject } from "../utilities/helperFunctions";
+import { getAverageReview, trimObject } from "../utilities/helperFunctions";
 
 // **************** Add review and rating ****************
 export const addReviewAndRating = async (
@@ -35,6 +36,24 @@ export const addReviewAndRating = async (
                     .execPopulate()
             );
         if (reviewRating) {
+            // calculating average rating
+            const reviews = await Review.find({ book: bookID }).select(
+                "rating"
+            );
+            console.log(reviews);
+            const formattedReview: number[] = reviews.map(
+                (review) => review.rating
+            );
+            console.log(formattedReview);
+            const overallReview = getAverageReview(formattedReview);
+
+            console.log(overallReview);
+            // storing rating data in book
+            const book = await PostBook.findOne({ _id: bookID });
+            if (book) {
+                book.rating = overallReview;
+                await book.save();
+            }
             return res.status(CREATED).json({
                 success: true,
                 message: label.review.reviewSuccess,
@@ -123,6 +142,21 @@ export const editReviewAndRating = async (
                     },
                     { new: true }
                 ).populate("user", "fullName email image");
+                // calculating average rating
+                const reviews = await Review.find({ book: review.book }).select(
+                    "rating"
+                );
+                const formattedReview: number[] = reviews.map(
+                    (review) => review.rating
+                );
+                const overallReview = getAverageReview(formattedReview);
+
+                // storing rating data in book
+                const book = await PostBook.findOne({ _id: review.book });
+                if (book) {
+                    book.rating = overallReview || 1;
+                    await book.save();
+                }
                 return res.status(SUCCESS).json({
                     success: true,
                     message: label.review.reviewUpdated,

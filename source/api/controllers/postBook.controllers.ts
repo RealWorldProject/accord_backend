@@ -26,6 +26,7 @@ export const postBook = async (
             category,
             isNewBook,
             isAvailableForExchange,
+            stock,
         } = req.body;
 
         const postBookObj = new PostBook({
@@ -37,16 +38,18 @@ export const postBook = async (
             category,
             isNewBook,
             isAvailableForExchange,
+            stock,
             status: "PENDING",
             userId: req.currentUser._id,
         });
-        const postBook = await postBookObj.save().then(postedBook => 
-            postedBook
-                .populate("userId", "fullName email image")
-                .populate("category", "category")
-                .execPopulate()
-        
-        );
+        const postBook = await postBookObj
+            .save()
+            .then((postedBook) =>
+                postedBook
+                    .populate("userId", "fullName email image")
+                    .populate("category", "category")
+                    .execPopulate()
+            );
         if (postBook) {
             return res.status(CREATED).json({
                 success: true,
@@ -246,12 +249,14 @@ export const updateBook = async (req: Request, res: Response) => {
                 postBook.isNewBook = isNewBook;
                 postBook.isAvailableForExchange = isAvailableForExchange;
                 postBook.images = images;
-                const updatedPostBook = await postBook.save().then(updatedBook => 
-                    updatedBook
-                        .populate("userId", "fullName email image")
-                        .populate("category", "category")
-                        .execPopulate()
-                );
+                const updatedPostBook = await postBook
+                    .save()
+                    .then((updatedBook) =>
+                        updatedBook
+                            .populate("userId", "fullName email image")
+                            .populate("category", "category")
+                            .execPopulate()
+                    );
                 return res.status(SUCCESS).json({
                     success: true,
                     message: label.postBook.bookUpdated,
@@ -295,12 +300,14 @@ export const deleteBook = async (req: Request, res: Response) => {
             // checking if the user owns the book
             if (postBook.userId.toString() === req.currentUser._id.toString()) {
                 postBook.isArchived = true;
-                const updatedPostBook = await postBook.save().then(updatedBook => 
-                    updatedBook
-                        .populate("userId", "fullName email image")
-                        .populate("category", "category")
-                        .execPopulate()
-                );
+                const updatedPostBook = await postBook
+                    .save()
+                    .then((updatedBook) =>
+                        updatedBook
+                            .populate("userId", "fullName email image")
+                            .populate("category", "category")
+                            .execPopulate()
+                    );
                 return res.status(SUCCESS).json({
                     success: true,
                     message: label.postBook.bookDeleted,
