@@ -22,13 +22,26 @@ export const postBookValidation = (data: any): ErrorType => {
             error.status = true;
             error.message = label.postBook.validation("Price");
         }
-        // if (!isNumber(data?.price)) {
-        //     error.status = true;
-        //     error.message = label.postBook.requireNumber;
-        // }
+        if (parseInt(data?.price) <= 0) {
+            error.status = true;
+            error.message = label.postBook.priceIsZero;
+        }
     } else {
         error.status = true;
         error.message = label.postBook.validation("Price");
+    }
+    if (data.hasOwnProperty("stock")) {
+        if (isEmpty(data?.stock)) {
+            error.status = true;
+            error.message = label.postBook.validation("Stock");
+        }
+        if (parseInt(data?.stock) <= 0) {
+            error.status = true;
+            error.message = label.postBook.stockIsZero;
+        }
+    } else {
+        error.status = true;
+        error.message = label.postBook.validation("Stock");
     }
     if (data.hasOwnProperty("images")) {
         if (data?.images.length < 1) {

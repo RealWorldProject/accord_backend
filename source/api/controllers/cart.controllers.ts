@@ -30,6 +30,17 @@ export const addToCart = async (
         });
 
         if (!book) isBook = false;
+        // checking the stock of the book
+        if (book) {
+            if (book.stock < bookQuantity) {
+                return res.status(BAD_REQUEST).json({
+                    success: false,
+                    message: label.postBook.stockNotAvailable,
+                    developerMessage: "",
+                    result: [],
+                });
+            }
+        }
         if (cart) {
             // add the product
             if (book) {

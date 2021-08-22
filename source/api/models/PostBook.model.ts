@@ -11,6 +11,8 @@ export interface PostBookData {
     userId: string | UserDocument;
     category: string | CategoryDocument;
     status: string;
+    stock: number;
+    rating: number;
     isNewBook: boolean;
     isAvailableForExchange: boolean;
     rejectionMessage: string;
@@ -20,9 +22,10 @@ export interface PostBookDocument extends PostBookData, mongoose.Document {
     createdAt: Date;
     updatedAt: Date;
     isArchived: boolean;
+    decreaseQuantity(decreaseBy: number): Promise<PostBookDocument>;
 }
 
-export const postBookSchema = new mongoose.Schema(
+export const postBookSchema = new mongoose.Schema<PostBookDocument>(
     {
         name: {
             type: String,
@@ -70,15 +73,34 @@ export const postBookSchema = new mongoose.Schema(
             required: true,
             ref: "category",
         },
+        stock: {
+            type: Number,
+            required: true,
+            default: 1,
+        },
         rejectionMessage: {
             type: String,
             required: false,
+        },
+        rating: {
+            type: Number,
+            required: true,
+            default: 1,
         },
     },
     {
         timestamps: true,
     }
 );
+
+postBookSchema.methods.decreaseQuantity = async function (
+    decreaseBy: number
+): Promise<PostBookDocument> {
+    const currentStock = this.stock;
+    const newStock = currentStock - decreaseBy;
+    this.stock = newStock;
+    return this.save();
+};
 
 const PostBook = mongoose.model<PostBookDocument>("postBook", postBookSchema);
 

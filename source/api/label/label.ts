@@ -64,12 +64,16 @@ export default {
         bookPosted: "Your book has been posted successfully.",
         validation: (field: string) => `${field} is required.`,
         requireNumber: "Please enter the number value only.",
+        priceIsZero: "Price cannot be 0.",
+        stockIsZero: "Stock cannot be 0.",
         chooseCategory: "Please the category of your book.",
         bookNotFound: "Sorry, the book is not found.",
         viewBookMessage: "Showing available books.",
         noBook: "There is no book available in at the moment.",
         couldNotViewBooks:
             "Sorry, could not fetch books at the moment. Please Try Again.",
+        stockNotAvailable:
+            "Sorry, The book for required amount is out of stock.",
     },
 
     category: {
@@ -125,6 +129,8 @@ export default {
             "Order has not been displayed at the moment, Please Try Again.",
         emptyOrder: "Empty order list",
         noOrder: "No any order has been placed.",
+        stockNotAvailable: (productName: string) =>
+            `Stock for ${productName} is not currently available so please decrease quantity or remove the product to checkout.`,
     },
 
     request: {
