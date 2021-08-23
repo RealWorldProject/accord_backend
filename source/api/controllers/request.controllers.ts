@@ -129,8 +129,8 @@ export const incomingRequest = async (
         const requestList = await RequestBook.find({
             requestedBookOwner: userID,
         })
-            .populate("user", "image, fullName, email")
-            .populate("requestedBookOwner", "image, fullName, email")
+            .populate("user", "image fullName email")
+            .populate("requestedBookOwner", "image fullName email")
             .populate({
                 path: "proposedExchangeBook",
                 populate: { path: "category userId" },
