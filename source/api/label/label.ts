@@ -152,6 +152,11 @@ export default {
         getNotifications: "All the notifications was shown.",
         emptyNotifications: "Empty notification found.",
         didNotGetNotification: "Error in getting notifications.",
+        requestUpdated: "Request has been updated.",
+        errorInEditingRequest: "Request was not updated.",
+        notAuthorized: "Sorry, You are not authorized to perform this action.",
+        cannotEditRequest:
+            "Sorry, request cannot be updated because your request has already been accepted or rejected.",
     },
 
     review: {

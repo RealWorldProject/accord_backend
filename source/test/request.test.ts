@@ -21,8 +21,7 @@ afterAll(async () => {
 });
 
 const token =
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwZjk2ZGNlOGQxOTA1MjE2MDk5YjViMCIsImlhdCI6MTYyODYxOTE2M30.yD1a5OBzvNuLjp-WZkMu0X9VnszAMC1lBGKG3hja8TI";
-
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYxMTM1Mzg3MjU2ZmMxNDI2MGNjYjQ1MCIsImlhdCI6MTYyOTcwMzUzN30.QvHlmvAFOatTNTlwBL27_kBo3QBPGEkDqPudvYki4gk";
 // BASE URL
 const baseUrl = "/api/v1/";
 
@@ -81,6 +80,18 @@ describe("APIs /requests", () => {
             const response = await request(app)
                 .get(baseUrl + `/notifications`)
                 .set("authorization", `Bearer ${token}`);
+            expect(response.statusCode).toBe(200);
+        });
+    });
+
+    describe("\n PATCH /request/edit || when user tries to edit their request", () => {
+        test("should respond with a 200 status code", async () => {
+            const response = await request(app)
+                .patch(baseUrl + `/request/61235219f0d2e91da800feb8`)
+                .set("authorization", `Bearer ${token}`)
+                .send({
+                    proposedExchangeBook: "61235084f0d2e91da800fea6",
+                });
             expect(response.statusCode).toBe(200);
         });
     });
