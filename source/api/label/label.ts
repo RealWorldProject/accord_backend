@@ -157,6 +157,10 @@ export default {
         notAuthorized: "Sorry, You are not authorized to perform this action.",
         cannotEditRequest:
             "Sorry, request cannot be updated because your request has already been accepted or rejected.",
+        cannotDeleteRequest:
+            "Sorry, request cannot be updated because your request has already been accepted or rejected.",
+        errorInRequestDelete: "Request for the book was not deleted.",
+        requestDeleted: "Request for the book was deleted.",
     },
 
     review: {

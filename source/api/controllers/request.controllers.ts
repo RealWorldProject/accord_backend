@@ -388,8 +388,6 @@ export const editRequestedBook = async (
         });
 
         if (request) {
-            console.log(request.user);
-            console.log(req.currentUser._id);
             const requestUser = request.user as UserDocument;
             if (requestUser._id.toString() === req.currentUser._id.toString()) {
                 if (book) {
@@ -462,6 +460,80 @@ export const editRequestedBook = async (
         res.status(INTERNAL_SERVER_ERROR).json({
             success: false,
             message: label.request.errorInEditingRequest,
+            developerMessage: error.message,
+            result: {},
+        });
+    }
+};
+
+// **************** Delete request ****************
+export const deleteRequest = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+) => {
+    const requestID = req?.params?.requestID;
+    try {
+        const request = await RequestBook.findOne({
+            _id: requestID,
+            isArchived: false,
+        })
+            .populate("user", "image fullName email")
+            .populate("requestedBookOwner", "image fullName email")
+            .populate("proposedExchangeBook")
+            .populate("requestedBook");
+
+        if (request) {
+            const requestUser = request.user as UserDocument;
+            if (requestUser._id.toString() === req.currentUser._id.toString()) {
+                if (
+                    request.status == "ACCEPTED" ||
+                    request.status == "REJECTED"
+                ) {
+                    return res.status(BAD_REQUEST).json({
+                        success: false,
+                        message: label.request.cannotDeleteRequest,
+                        developerMessage: "",
+                        result: {},
+                    });
+                } else {
+                    request.isArchived = true;
+                    const updatedRequest = await request
+                        .save()
+                        .then((updatedRequest) =>
+                            updatedRequest
+                                .populate("user", "image fullName email")
+                                .execPopulate()
+                        );
+                    await Notification.deleteOne({ request: request._id });
+                    return res.status(SUCCESS).json({
+                        success: true,
+                        message: label.request.requestDeleted,
+                        developerMessage: "",
+                        result: updatedRequest,
+                    });
+                }
+            } else {
+                return res.status(UNAUTHORIZED).json({
+                    success: false,
+                    message: label.request.notAuthorized,
+                    developerMessage: "",
+                    result: request,
+                });
+            }
+        } else {
+            res.status(BAD_REQUEST).json({
+                success: false,
+                message: label.request.errorInRequestDelete,
+                developerMessage: "",
+                result: {},
+            });
+        }
+    } catch (error) {
+        console.log(error);
+        res.status(INTERNAL_SERVER_ERROR).json({
+            success: false,
+            message: label.request.errorInRequestDelete,
             developerMessage: error.message,
             result: {},
         });
