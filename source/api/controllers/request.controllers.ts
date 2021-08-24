@@ -11,6 +11,7 @@ import PostBook, { PostBookDocument } from "../models/PostBook.model";
 import RequestBook from "../models/Request.model";
 import Notification from "../models/Notification.model";
 import { UserDocument } from "../models/User.model";
+import { trimObject } from "../utilities/helperFunctions";
 
 // -------------- Request a book -------------------
 export const requestBook = async (
@@ -129,8 +130,10 @@ export const incomingRequest = async (
         const requestList = await RequestBook.find({
             requestedBookOwner: userID,
         })
-            .populate("user", "image fullName email")
-            .populate("requestedBookOwner", "image fullName email")
+            .sort({ createdAt: -1 })
+            .populate("user", "image, fullName, email")
+            .populate("requestedBookOwner", "image, fullName, email")
+
             .populate({
                 path: "proposedExchangeBook",
                 populate: { path: "category userId" },
@@ -176,6 +179,7 @@ export const myRequest = async (
         const requestList = await RequestBook.find({
             user: userID,
         })
+            .sort({ createdAt: -1 })
             .populate("user", "image fullName email")
             .populate("requestedBookOwner", "image fullName email")
             .populate({
@@ -343,7 +347,7 @@ export const getNotification = async (
     try {
         const notifications = await Notification.find({
             user: userID,
-        });
+        }).sort({ createdAt: -1 });
         const totalNotifications = await Notification.countDocuments({
             user: userID,
         });
@@ -368,6 +372,181 @@ export const getNotification = async (
         res.status(INTERNAL_SERVER_ERROR).json({
             success: false,
             message: label.request.didNotGetNotification,
+            developerMessage: error.message,
+            result: {},
+        });
+    }
+};
+
+// **************** Edit request ****************
+export const editRequestedBook = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+) => {
+    const requestID = req?.params?.requestID;
+
+    try {
+        const requestBook = trimObject(req.body);
+        const request = await RequestBook.findOne({
+            _id: requestID,
+            isArchived: false,
+        })
+            .populate("user", "image fullName email")
+            .populate("requestedBookOwner", "image fullName email")
+            .populate("requestedBook");
+
+        const book = await PostBook.findOne({
+            _id: req.body.proposedExchangeBook,
+        });
+
+        if (request) {
+            const requestUser = request.user as UserDocument;
+            if (requestUser._id.toString() === req.currentUser._id.toString()) {
+                if (book) {
+                    if (
+                        request.status == "ACCEPTED" ||
+                        request.status == "REJECTED"
+                    ) {
+                        return res.status(BAD_REQUEST).json({
+                            success: false,
+                            message: label.request.cannotEditRequest,
+                            developerMessage: "",
+                            result: {},
+                        });
+                    } else {
+                        const updatedRequest =
+                            await RequestBook.findOneAndUpdate(
+                                { _id: requestID },
+                                { $set: requestBook },
+                                { new: true }
+                            );
+
+                        // add
+                        await Notification.deleteOne({ request: request._id });
+                        const exchangeBook =
+                            request.requestedBook as PostBookDocument;
+
+                        const notificationObj = new Notification({
+                            type: "INCOMING_REQUEST",
+                            user: book.userId,
+                            requesterPhoto: req.currentUser.image,
+                            request: request._id,
+                            notificationBody: `${req.currentUser.fullName} requested your ${book.name} book, wants to exchange it for ${exchangeBook.name}`,
+                        });
+                        const notification = await notificationObj.save();
+
+                        return res.status(SUCCESS).json({
+                            success: true,
+                            message: label.request.requestUpdated,
+                            developerMessage: "",
+                            result: updatedRequest,
+                        });
+                    }
+                } else {
+                    // book not found vanea bad requestr pahti
+                    res.status(BAD_REQUEST).json({
+                        success: false,
+                        message: label.request.noBookFound,
+                        developerMessage: "",
+                        result: {},
+                    });
+                }
+            } else {
+                return res.status(UNAUTHORIZED).json({
+                    success: false,
+                    message: label.request.notAuthorized,
+                    developerMessage: "",
+                    result: request,
+                });
+            }
+        } else {
+            res.status(BAD_REQUEST).json({
+                success: false,
+                message: label.request.errorInEditingRequest,
+                developerMessage: "",
+                result: {},
+            });
+        }
+    } catch (error) {
+        console.log(error);
+        res.status(INTERNAL_SERVER_ERROR).json({
+            success: false,
+            message: label.request.errorInEditingRequest,
+            developerMessage: error.message,
+            result: {},
+        });
+    }
+};
+
+// **************** Delete request ****************
+export const deleteRequest = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+) => {
+    const requestID = req?.params?.requestID;
+    try {
+        const request = await RequestBook.findOne({
+            _id: requestID,
+            isArchived: false,
+        })
+            .populate("user", "image fullName email")
+            .populate("requestedBookOwner", "image fullName email")
+            .populate("proposedExchangeBook")
+            .populate("requestedBook");
+
+        if (request) {
+            const requestUser = request.user as UserDocument;
+            if (requestUser._id.toString() === req.currentUser._id.toString()) {
+                if (
+                    request.status == "ACCEPTED" ||
+                    request.status == "REJECTED"
+                ) {
+                    return res.status(BAD_REQUEST).json({
+                        success: false,
+                        message: label.request.cannotDeleteRequest,
+                        developerMessage: "",
+                        result: {},
+                    });
+                } else {
+                    request.isArchived = true;
+                    const updatedRequest = await request
+                        .save()
+                        .then((updatedRequest) =>
+                            updatedRequest
+                                .populate("user", "image fullName email")
+                                .execPopulate()
+                        );
+                    await Notification.deleteOne({ request: request._id });
+                    return res.status(SUCCESS).json({
+                        success: true,
+                        message: label.request.requestDeleted,
+                        developerMessage: "",
+                        result: updatedRequest,
+                    });
+                }
+            } else {
+                return res.status(UNAUTHORIZED).json({
+                    success: false,
+                    message: label.request.notAuthorized,
+                    developerMessage: "",
+                    result: request,
+                });
+            }
+        } else {
+            res.status(BAD_REQUEST).json({
+                success: false,
+                message: label.request.errorInRequestDelete,
+                developerMessage: "",
+                result: {},
+            });
+        }
+    } catch (error) {
+        console.log(error);
+        res.status(INTERNAL_SERVER_ERROR).json({
+            success: false,
+            message: label.request.errorInRequestDelete,
             developerMessage: error.message,
             result: {},
         });
