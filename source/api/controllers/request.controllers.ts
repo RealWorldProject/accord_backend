@@ -82,8 +82,8 @@ export const requestBook = async (
                 const newRequest = await RequestBook.findOne({
                     _id: request._id,
                 })
-                    .populate("user", "image, fullName, email")
-                    .populate("requestedBookOwner", "image, fullName, email")
+                    .populate("user", "image fullName email")
+                    .populate("requestedBookOwner", "image fullName email")
                     .populate({
                         path: "proposedExchangeBook",
                         populate: { path: "category userId" },
@@ -131,8 +131,8 @@ export const incomingRequest = async (
             requestedBookOwner: userID,
         })
             .sort({ createdAt: -1 })
-            .populate("user", "image, fullName, email")
-            .populate("requestedBookOwner", "image, fullName, email")
+            .populate("user", "image fullName email")
+            .populate("requestedBookOwner", "image fullName email")
 
             .populate({
                 path: "proposedExchangeBook",

@@ -220,7 +220,6 @@ export const userProfile = async (
             },
             { password: 0, permissionLevel: 0, isArchived: 0 }
         );
-        // .select("-password");
         return res.status(SUCCESS).json({
             success: true,
             message: label.auth.viewProfileSuccess,
