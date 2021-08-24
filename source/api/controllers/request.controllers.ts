@@ -239,6 +239,12 @@ export const acceptRequest = async (
             const proposedExchangeBook =
                 request.proposedExchangeBook as PostBookDocument;
             await proposedExchangeBook.decreaseQuantity(1);
+            // delete notification request
+            await Notification.deleteOne({
+                request: request._id,
+                type: "INCOMING_REQUEST",
+            });
+            // add new notification
             const notificationObj = new Notification({
                 type: "ACCEPTED",
                 user: bookRequestUser._id,
@@ -293,6 +299,12 @@ export const rejectRequest = async (
             const bookOwner = request.requestedBookOwner as UserDocument;
             const proposedExchangeBook =
                 request.proposedExchangeBook as PostBookDocument;
+            // delete notification request
+            await Notification.deleteOne({
+                request: request._id,
+                type: "INCOMING_REQUEST",
+            });
+            // add new notification
             const notificationObj = new Notification({
                 type: "REJECTED",
                 user: bookRequestUser._id,
