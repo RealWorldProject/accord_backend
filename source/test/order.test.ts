@@ -69,4 +69,13 @@ describe("APIs /orders", () => {
             expect(response.statusCode).toBe(200);
         });
     });
+    describe("\n PATCH /order/:orderID || when user tries to cancel an orders", () => {
+        test("should respond with a 200 status code", async () => {
+            const response = await request(app)
+                .get(baseUrl + `/order/612669dfcf6af633045ddf4a`)
+                .set("authorization", `Bearer ${userToken}`)
+                .expect("Content-Type", /json/);
+            expect(response.statusCode).toBe(200);
+        });
+    });
 });
