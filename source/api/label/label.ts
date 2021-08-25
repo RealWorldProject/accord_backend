@@ -129,6 +129,8 @@ export default {
             "Order has not been displayed at the moment, Please Try Again.",
         emptyOrder: "Empty order list",
         noOrder: "No any order has been placed.",
+        statFetched: "Stats were Fetched",
+        statFetchError: "Stats couldn't be Fetched",
         stockNotAvailable: (productName: string) =>
             `Stock for ${productName} is not currently available so please decrease quantity or remove the product to checkout.`,
     },

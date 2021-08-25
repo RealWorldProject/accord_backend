@@ -163,11 +163,18 @@ export const loginAdmin = async (
             if (passwordMatched) {
                 const token = generateToken(userFound._id);
                 if (token) {
+                    const returnData = {
+                        _id: userFound?._id,
+                        fullName: userFound?.fullName,
+                        email: userFound?.email,
+                        image: userFound?.image,
+                        phoneNumber: userFound?.phoneNumber,
+                    };
                     return res.status(SUCCESS).json({
                         success: true,
                         message: label.auth.loginSuccessful,
                         developerMessage: "",
-                        result: {},
+                        result: returnData,
                         token: token,
                         permissionLevel: userFound.permissionLevel,
                     });

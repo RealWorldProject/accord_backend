@@ -8,8 +8,10 @@ import {
 } from "../constants/status-codes.constants";
 import label from "../label/label";
 import Cart from "../models/Cart.model";
+import Category from "../models/Category.model";
 import Order from "../models/Order.model";
-import { PostBookDocument } from "../models/PostBook.model";
+import PostBook, { PostBookDocument } from "../models/PostBook.model";
+import User, { userSchema } from "../models/User.model";
 import { StockCheck } from "../types/interfaces";
 import { getRandomOrderNumber, trimObject } from "../utilities/helperFunctions";
 
@@ -216,6 +218,70 @@ export const viewMyOrder = async (
         res.status(INTERNAL_SERVER_ERROR).json({
             success: false,
             message: label.order.orderNotViewed,
+            developerMessage: error.message,
+            result: {},
+        });
+    }
+};
+
+// stats
+export const getOverallStats = async (req: Request, res: Response) => {
+    try {
+        const users = await User.countDocuments({ isArchived: false });
+        const orders = await Order.countDocuments({ isArchived: false });
+        const books = await PostBook.countDocuments({ isArchived: false });
+        const pendingBooks = await PostBook.countDocuments({
+            isArchived: false,
+            status: "PENDING",
+        });
+        const approvedBooks = await PostBook.countDocuments({
+            isArchived: false,
+            status: "VERIFIED",
+        });
+        const rejectedBooks = await PostBook.countDocuments({
+            isArchived: false,
+            status: "REJECTED",
+        });
+        const activeUsers = await User.countDocuments({
+            isArchived: false,
+            isSuspended: false,
+        });
+        const suspendedUsers = await User.countDocuments({
+            isArchived: false,
+            isSuspended: true,
+        });
+        const numberOfBooksAccordingToCategory = await PostBook.aggregate([
+            {
+                $group: { _id: "$category", Total: { $sum: 1 } },
+            },
+        ]);
+        const booksWithCategoryName = await Promise.all(
+            numberOfBooksAccordingToCategory.map(async (data) => {
+                const category = await Category.findOne({ _id: data._id });
+                return {
+                    name: category?.category,
+                    number: data.Total,
+                };
+            })
+        );
+        const data = {
+            orders,
+            books,
+            bookData: [pendingBooks, approvedBooks, rejectedBooks],
+            userData: [activeUsers, suspendedUsers],
+            booksWithCategoryName,
+        };
+        return res.status(SUCCESS).json({
+            success: true,
+            message: label.order.statFetched,
+            developerMessage: "",
+            result: data,
+        });
+    } catch (error) {
+        console.log(error);
+        res.status(INTERNAL_SERVER_ERROR).json({
+            success: false,
+            message: label.order.statFetchError,
             developerMessage: error.message,
             result: {},
         });
