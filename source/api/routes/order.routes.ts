@@ -3,9 +3,11 @@ import {
     MAKE_ORDER,
     VIEW_MY_ORDER,
     VIEW_ORDER,
+    VIEW_STATS,
 } from "../constants/order.constants";
 import {
     checkoutOrder,
+    getOverallStats,
     viewMyOrder,
     viewOrder,
 } from "../controllers/order.controllers";
@@ -29,5 +31,7 @@ orderRoutes.get(VIEW_MY_ORDER, authenticateToken, viewMyOrder);
 
 // ADMIN ROUTE
 orderRoutes.get(VIEW_ORDER, authenticateToken, isAdmin, viewOrder);
+
+orderRoutes.get(VIEW_STATS, authenticateToken, isAdmin, getOverallStats);
 
 export = orderRoutes;
