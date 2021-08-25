@@ -52,10 +52,19 @@ export const requestBook = async (
         }
         if (book) {
             if (book.isAvailableForExchange === false) {
-                //
+                // check to see if hte book is available for exhange
                 return res.status(BAD_REQUEST).json({
                     success: false,
                     message: label.request.notAvailable,
+                    developerMessage: "",
+                    result: {},
+                });
+            }
+            if (book.stock <= 0) {
+                // check to see if the book has stock
+                return res.status(BAD_REQUEST).json({
+                    success: false,
+                    message: label.request.stockNotAvailable(book.name),
                     developerMessage: "",
                     result: {},
                 });
@@ -244,7 +253,9 @@ export const acceptRequest = async (
             const bookOwner = request.requestedBookOwner as UserDocument;
             const proposedExchangeBook =
                 request.proposedExchangeBook as PostBookDocument;
+            const requestedBook = request.requestedBook as PostBookDocument;
             await proposedExchangeBook.decreaseQuantity(1);
+            await requestedBook.decreaseQuantity(1);
             // delete notification request
             await Notification.deleteOne({
                 request: request._id,
@@ -407,6 +418,15 @@ export const editRequestedBook = async (
             const requestUser = request.user as UserDocument;
             if (requestUser._id.toString() === req.currentUser._id.toString()) {
                 if (book) {
+                    if (book.stock <= 0) {
+                        // check to see if the book has stock
+                        return res.status(BAD_REQUEST).json({
+                            success: false,
+                            message: label.request.stockNotAvailable(book.name),
+                            developerMessage: "",
+                            result: {},
+                        });
+                    }
                     if (
                         request.status == "ACCEPTED" ||
                         request.status == "REJECTED"
@@ -425,7 +445,10 @@ export const editRequestedBook = async (
                                 { new: true }
                             )
                                 .populate("user", "image fullName email")
-                                .populate("requestedBookOwner", "image fullName email")
+                                .populate(
+                                    "requestedBookOwner",
+                                    "image fullName email"
+                                )
                                 .populate({
                                     path: "proposedExchangeBook",
                                     populate: { path: "category userId" },
@@ -529,7 +552,10 @@ export const deleteRequest = async (
                         .then((updatedRequest) =>
                             updatedRequest
                                 .populate("user", "image fullName email")
-                                .populate("requestedBookOwner", "image fullName email")
+                                .populate(
+                                    "requestedBookOwner",
+                                    "image fullName email"
+                                )
                                 .populate({
                                     path: "proposedExchangeBook",
                                     populate: { path: "category userId" },

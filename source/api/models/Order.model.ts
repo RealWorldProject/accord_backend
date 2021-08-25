@@ -5,6 +5,7 @@ import { UserDocument } from "./User.model";
 // to retrieve each
 type cartBooks = {
     bookName: string;
+    bookID: string;
     bookPrice: number;
     bookAuthor: string;
     bookImage: string;
@@ -24,6 +25,7 @@ export interface OrderData {
     address: string;
     coordinates: string;
     paymentGateway: string;
+    status: string;
     orderTotalPrice: number;
 }
 
@@ -46,6 +48,10 @@ export const orderSchema = new mongoose.Schema(
         },
         orderItems: [
             {
+                bookID: {
+                    type: String,
+                    required: false,
+                },
                 bookName: {
                     type: String,
                     required: false,
@@ -115,12 +121,17 @@ export const orderSchema = new mongoose.Schema(
             required: true,
             default: false,
         },
+        status: {
+            type: String,
+            enum: ["PENDING", "CANCELLED"],
+            default: "PENDING",
+        },
     },
     {
         timestamps: true,
     }
 );
 
-const Order = mongoose.model<OrderData>("order", orderSchema);
+const Order = mongoose.model<OrderDocument>("order", orderSchema);
 
 export default Order;
