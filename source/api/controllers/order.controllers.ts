@@ -5,6 +5,7 @@ import {
     FORBIDDEN,
     SUCCESS,
     BAD_REQUEST,
+    UNAUTHORIZED,
 } from "../constants/status-codes.constants";
 import label from "../label/label";
 import Cart from "../models/Cart.model";
@@ -12,6 +13,7 @@ import Category from "../models/Category.model";
 import Order from "../models/Order.model";
 import PostBook, { PostBookDocument } from "../models/PostBook.model";
 import User, { userSchema } from "../models/User.model";
+import { use } from "../routes/user.routes";
 import { StockCheck } from "../types/interfaces";
 import { getRandomOrderNumber, trimObject } from "../utilities/helperFunctions";
 
@@ -114,6 +116,7 @@ export const checkoutOrder = async (
                 // calculating total price of order
                 orderTotalPrice += item.totalPrice;
                 return {
+                    bookID: book._id,
                     bookName: book.name,
                     bookPrice: book.price,
                     bookAuthor: book.author,
@@ -283,6 +286,53 @@ export const getOverallStats = async (req: Request, res: Response) => {
         res.status(INTERNAL_SERVER_ERROR).json({
             success: false,
             message: label.order.statFetchError,
+            developerMessage: error.message,
+            result: {},
+        });
+    }
+};
+
+export const cancelOrder = async (req: Request, res: Response) => {
+    const userID = req.currentUser._id;
+    const orderID = req.params.orderID;
+
+    try {
+        const order = await Order.findOne({
+            _id: orderID,
+        });
+        if (order) {
+            if (order.userID.toString() === userID.toString()) {
+                order.status = "CANCELLED";
+                const updatedOrder = await order.save();
+                if (updatedOrder) {
+                    const orderProducts = [...updatedOrder.orderItems];
+                    orderProducts.forEach(async (product) => {
+                        const book = await PostBook.findOne({
+                            _id: product.bookID,
+                        });
+                        await book?.increaseQuantity(product.quantity);
+                    });
+                    return res.status(SUCCESS).json({
+                        success: true,
+                        message: label.order.orderDeleted,
+                        developerMessage: "",
+                        result: updatedOrder,
+                    });
+                }
+            } else {
+                return res.status(UNAUTHORIZED).json({
+                    success: true,
+                    message: label.order.notAuthorized,
+                    developerMessage: "",
+                    result: {},
+                });
+            }
+        }
+    } catch (error) {
+        console.log(error);
+        res.status(INTERNAL_SERVER_ERROR).json({
+            success: false,
+            message: label.order.orderDeleteError,
             developerMessage: error.message,
             result: {},
         });

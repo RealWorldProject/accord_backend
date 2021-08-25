@@ -1,11 +1,13 @@
 import express from "express";
 import {
+    CANCEL_ORDER,
     MAKE_ORDER,
     VIEW_MY_ORDER,
     VIEW_ORDER,
     VIEW_STATS,
 } from "../constants/order.constants";
 import {
+    cancelOrder,
     checkoutOrder,
     getOverallStats,
     viewMyOrder,
@@ -26,6 +28,8 @@ orderRoutes.post(
     validateOrderBody,
     checkoutOrder
 );
+
+orderRoutes.patch(CANCEL_ORDER, authenticateToken, cancelOrder);
 
 orderRoutes.get(VIEW_MY_ORDER, authenticateToken, viewMyOrder);
 

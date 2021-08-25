@@ -131,6 +131,9 @@ export default {
         noOrder: "No any order has been placed.",
         statFetched: "Stats were Fetched",
         statFetchError: "Stats couldn't be Fetched",
+        orderDeleted: "Your Order has been Cancelled.",
+        orderDeleteError: "Your Order could not be cancelled.",
+        notAuthorized: "You are not authorized to delete this order.",
         stockNotAvailable: (productName: string) =>
             `Stock for ${productName} is not currently available so please decrease quantity or remove the product to checkout.`,
     },
@@ -163,6 +166,8 @@ export default {
             "Sorry, request cannot be updated because your request has already been accepted or rejected.",
         errorInRequestDelete: "Request for the book was not deleted.",
         requestDeleted: "Request for the book was deleted.",
+        stockNotAvailable: (productName: string) =>
+            `Stock for ${productName} is not currently available.`,
     },
 
     review: {

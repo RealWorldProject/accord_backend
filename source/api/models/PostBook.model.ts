@@ -23,6 +23,7 @@ export interface PostBookDocument extends PostBookData, mongoose.Document {
     updatedAt: Date;
     isArchived: boolean;
     decreaseQuantity(decreaseBy: number): Promise<PostBookDocument>;
+    increaseQuantity(increaseBy: number): Promise<PostBookDocument>;
 }
 
 export const postBookSchema = new mongoose.Schema<PostBookDocument>(
@@ -98,6 +99,15 @@ postBookSchema.methods.decreaseQuantity = async function (
 ): Promise<PostBookDocument> {
     const currentStock = this.stock;
     const newStock = currentStock - decreaseBy;
+    this.stock = newStock;
+    return this.save();
+};
+
+postBookSchema.methods.increaseQuantity = async function (
+    increaseBy: number
+): Promise<PostBookDocument> {
+    const currentStock = this.stock;
+    const newStock = currentStock + increaseBy;
     this.stock = newStock;
     return this.save();
 };
