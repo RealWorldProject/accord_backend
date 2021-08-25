@@ -129,6 +129,7 @@ export const incomingRequest = async (
     try {
         const requestList = await RequestBook.find({
             requestedBookOwner: userID,
+            isArchived: false,
         })
             .sort({ createdAt: -1 })
             .populate("user", "image fullName email")
@@ -178,6 +179,7 @@ export const myRequest = async (
     try {
         const requestList = await RequestBook.find({
             user: userID,
+            isArchived: false,
         })
             .sort({ createdAt: -1 })
             .populate("user", "image fullName email")
@@ -347,6 +349,7 @@ export const getNotification = async (
     try {
         const notifications = await Notification.find({
             user: userID,
+            isArchived: false,
         }).sort({ createdAt: -1 });
         const totalNotifications = await Notification.countDocuments({
             user: userID,
@@ -420,7 +423,17 @@ export const editRequestedBook = async (
                                 { _id: requestID },
                                 { $set: requestBook },
                                 { new: true }
-                            );
+                            )
+                                .populate("user", "image fullName email")
+                                .populate("requestedBookOwner", "image fullName email")
+                                .populate({
+                                    path: "proposedExchangeBook",
+                                    populate: { path: "category userId" },
+                                })
+                                .populate({
+                                    path: "requestedBook",
+                                    populate: { path: "category userId" },
+                                });
 
                         // add
                         await Notification.deleteOne({ request: request._id });
@@ -516,6 +529,15 @@ export const deleteRequest = async (
                         .then((updatedRequest) =>
                             updatedRequest
                                 .populate("user", "image fullName email")
+                                .populate("requestedBookOwner", "image fullName email")
+                                .populate({
+                                    path: "proposedExchangeBook",
+                                    populate: { path: "category userId" },
+                                })
+                                .populate({
+                                    path: "requestedBook",
+                                    populate: { path: "category userId" },
+                                })
                                 .execPopulate()
                         );
                     await Notification.deleteOne({ request: request._id });
