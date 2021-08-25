@@ -27,7 +27,7 @@ export const viewOrder = async (
     const orderID = req.query.orderID as string;
 
     try {
-        const orderList = await Order.find({})
+        const orderList = await Order.find({ isArchived: false })
             .populate("userID", "fullName email image")
             .skip(page * limit - limit)
             .limit(limit);
@@ -265,6 +265,7 @@ export const getOverallStats = async (req: Request, res: Response) => {
             })
         );
         const data = {
+            users,
             orders,
             books,
             bookData: [pendingBooks, approvedBooks, rejectedBooks],
