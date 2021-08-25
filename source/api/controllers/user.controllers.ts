@@ -8,6 +8,7 @@ import {
     BAD_REQUEST,
     INTERNAL_SERVER_ERROR,
     CREATED,
+    UNAUTHORIZED,
 } from "../constants/status-codes.constants";
 import label from "../label/label";
 import User, { UserDocument } from "../models/User.model";
@@ -94,6 +95,14 @@ export const loginUser = async (
             );
 
             if (passwordMatched) {
+                if (userFound.isSuspended) {
+                    return res.status(UNAUTHORIZED).json({
+                        success: true,
+                        message: userFound.suspensionMessage,
+                        developerMessage: userFound.suspensionMessage,
+                        result: {},
+                    });
+                }
                 const token = generateToken(userFound._id);
                 if (token) {
                     return res.status(SUCCESS).json({
