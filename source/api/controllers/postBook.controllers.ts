@@ -186,8 +186,8 @@ export const viewBooks = async (req: Request, res: Response) => {
             name: new RegExp(searchTerm, "i"),
         });
 
-        if (userID == null) {
-            query = { ...query, _id: { $ne: req.currentUser._id } };
+        if (!userID) {
+            query = { ...query, userId: { $ne: req.currentUser._id } };
         }
 
         const books = await PostBook.find(query)
