@@ -184,6 +184,7 @@ export const viewBooks = async (req: Request, res: Response) => {
             _id: bookID,
             userId: userID,
             name: new RegExp(searchTerm, "i"),
+            stock: { $gt: 0 },
         });
 
         if (!userID) {
@@ -238,6 +239,7 @@ export const updateBook = async (req: Request, res: Response) => {
             category,
             isNewBook,
             isAvailableForExchange,
+            stock,
         } = req.body;
         const postBook = await PostBook.findOne({
             _id: bookID,
@@ -254,6 +256,7 @@ export const updateBook = async (req: Request, res: Response) => {
                 postBook.isNewBook = isNewBook;
                 postBook.isAvailableForExchange = isAvailableForExchange;
                 postBook.images = images;
+                postBook.stock = stock;
                 const updatedPostBook = await postBook
                     .save()
                     .then((updatedBook) =>

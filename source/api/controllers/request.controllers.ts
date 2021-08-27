@@ -295,6 +295,7 @@ export const acceptRequest = async (
                 message: label.request.requestAccepted,
                 developerMessage: "",
                 result: request,
+                notification: notification,
             });
         } else {
             throw new Error(label.request.requestNotAccepted);
@@ -355,6 +356,7 @@ export const rejectRequest = async (
                 message: label.request.requestRejected,
                 developerMessage: "",
                 result: request,
+                notification,
             });
         } else {
             throw new Error(label.request.requestNotRejected);
