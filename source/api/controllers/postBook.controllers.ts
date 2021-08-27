@@ -184,11 +184,14 @@ export const viewBooks = async (req: Request, res: Response) => {
             _id: bookID,
             userId: userID,
             name: new RegExp(searchTerm, "i"),
-            stock: { $gt: 0 },
         });
 
         if (!userID) {
-            query = { ...query, userId: { $ne: req.currentUser._id } };
+            query = {
+                ...query,
+                userId: { $ne: req.currentUser._id },
+                stock: { $gt: 0 },
+            };
         }
 
         const books = await PostBook.find(query)
