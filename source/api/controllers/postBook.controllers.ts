@@ -177,7 +177,7 @@ export const viewBooks = async (req: Request, res: Response) => {
 
     try {
         // trim object remove all the empty field in the object
-        const query = trimObject({
+        let query = trimObject({
             isArchived: false,
             status: "VERIFIED",
             category: categoryID,
@@ -185,6 +185,11 @@ export const viewBooks = async (req: Request, res: Response) => {
             userId: userID,
             name: new RegExp(searchTerm, "i"),
         });
+
+        if (userID == null) {
+            query = { ...query, _id: { $ne: req.currentUser._id } };
+        }
+
         const books = await PostBook.find(query)
             .skip(page * limit - limit)
             .limit(limit)

@@ -247,13 +247,33 @@ export const acceptRequest = async (
                 populate: { path: "category userId" },
             });
         if (request) {
+            const requestedBook = request.requestedBook as PostBookDocument;
+            const proposedExchangeBook =
+                request.proposedExchangeBook as PostBookDocument;
+            if (requestedBook.stock <= 0) {
+                return res.status(BAD_REQUEST).json({
+                    success: false,
+                    message: label.request.stockNotAvailable(
+                        requestedBook.name
+                    ),
+                    developerMessage: "",
+                    result: request,
+                });
+            }
+            if (proposedExchangeBook.stock <= 0) {
+                return res.status(BAD_REQUEST).json({
+                    success: false,
+                    message: label.request.stockNotAvailable(
+                        proposedExchangeBook.name
+                    ),
+                    developerMessage: "",
+                    result: request,
+                });
+            }
             request.status = "ACCEPTED";
             const updatedRequest = await request.save();
             const bookRequestUser = request.user as UserDocument;
             const bookOwner = request.requestedBookOwner as UserDocument;
-            const proposedExchangeBook =
-                request.proposedExchangeBook as PostBookDocument;
-            const requestedBook = request.requestedBook as PostBookDocument;
             await proposedExchangeBook.decreaseQuantity(1);
             await requestedBook.decreaseQuantity(1);
             // delete notification request
